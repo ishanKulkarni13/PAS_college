@@ -1,6 +1,6 @@
 # 12. Limitations, Future Scope, Applications and References
 
-Notebook cell 95. Report sections 7.3, 7.4, 8.2 and References.
+Notebook cell 92. Report sections 7.3, 7.4, 8.2 and References.
 
 ## Limitations of the study (report 7.4)
 
@@ -10,8 +10,10 @@ Notebook cell 95. Report sections 7.3, 7.4, 8.2 and References.
 - A few unusual rows (16 sizes below 50 sq. ft.; one Rs. 35,00,000 rent in Bangalore, probably a data-entry error but unproven). They were kept and affect means, SDs and the raw regression.
 
 **Methods**
-- Rent is far from normal. The CI and t-tests lean on the large sample (CLT); ANOVA's equal-variance assumption fails (Levene), so Kruskal-Wallis was added as a check.
-- The Furnished vs Unfurnished and Mumbai vs others comparisons are raw group comparisons; they do not control for size, city or other factors (confounding).
+- Rent is far from normal, so the CI, the t-test and the ANOVA lean on the large sample (CLT).
+- The traditional (pooled) t-test and the one-way ANOVA both assume equal variances. We assumed this and did **not verify** it. The group SDs differ a lot (furnished Rs. 80,631 vs unfurnished Rs. 35,168; cities from Rs. 11,137 in Kolkata to Rs. 120,056 in Bangalore), so the t statistic, F value and p-values should be read with caution.
+- A significant ANOVA only shows that at least one city's mean differs; we did not run tests for individual pairs of cities (no post-hoc test).
+- The Furnished vs Unfurnished comparison is a raw group comparison; it does not control for size, city or other factors (confounding).
 - Regression uses only a few variables and a single 80/20 split; no cross-validation. Back-transformed log predictions are median-like, not mean.
 - Size, BHK and Bathroom are strongly correlated (multicollinearity), so individual coefficients are less stable.
 - All results are associations; none proves causation.
@@ -21,7 +23,7 @@ Notebook cell 95. Report sections 7.3, 7.4, 8.2 and References.
 - Add more variables: floor, area locality, tenant preference, point of contact, and the posting date.
 - Use cross-validation instead of a single split; try other models (for example regularised regression) for comparison.
 - Check the extreme listings against the original source, and repeat the analysis with and without them.
-- Add a post-hoc test (Tukey) after ANOVA to name which city pairs differ.
+- Check the equal-variance assumption formally and, if it fails, use a test that does not need it; add a post-hoc test (Tukey) after ANOVA to name which city pairs differ.
 - Test for interaction (does the effect of size differ by city?) and use a VIF check for multicollinearity.
 - Collect newer, larger data from more cities and a random sampling design.
 

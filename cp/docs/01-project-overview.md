@@ -42,15 +42,15 @@ Result interpretation -> Conclusion
 | Descriptive statistics, distribution, city comparison | cells 17-45 | 04 |
 | Correlation | cells 46-55 | 07 |
 | LLN and CLT | cells 56-66 | 05 |
-| Confidence interval and hypothesis tests | cells 67-80 | 06 |
-| Regression | cells 81-93 | 08 |
-| Findings and conclusion | cells 94-95 | 09, 12 |
+| Confidence interval and hypothesis tests | cells 67-77 | 06 |
+| Regression | cells 78-90 | 08 |
+| Findings and conclusion | cells 91-92 | 09, 12 |
 
 ## Key results in five sentences
 
 1. Rent is strongly right-skewed: mean Rs. 34,993 against median Rs. 16,000, because a few very expensive listings pull the mean up.
 2. Mumbai is by far the most expensive city (mean Rs. 85,321) and Kolkata the cheapest (mean Rs. 11,645); the 95% CI for the overall mean is Rs. 32,771 to Rs. 37,216.
-3. All hypothesis tests are significant at 5%: Mumbai vs other cities, Furnished vs Unfurnished, and ANOVA across the six cities.
+3. Both hypothesis tests are significant at 5%: the independent two-sample t-test (Furnished vs Unfurnished) and the one-way ANOVA across the six cities. Both assume equal variances, which we did not verify (see 06).
 4. Rent has a moderate positive correlation with Size (Pearson 0.41), BHK (0.37) and Bathroom (0.44); Spearman values are higher (0.52, 0.57, 0.66).
 5. Size alone is a weak predictor (test R-squared 0.32); a multiple regression on log(Rent) with Size, BHK, Bathroom and City is much better (test MAE about Rs. 12,230, R-squared 0.79 on the log scale).
 

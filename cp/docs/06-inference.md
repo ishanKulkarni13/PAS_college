@@ -1,6 +1,6 @@
 # 06. Statistical Inference: Confidence Interval and Hypothesis Tests
 
-Notebook cells 67-80. Report sections 4.1 to 4.4.
+Notebook cells 67-77. Report sections 4.1 to 4.4.
 
 **Inference = using a sample to say something about a bigger group.** Here the "bigger group" is the rental market, and our sample is the 4,746 listings. Since it is a convenience sample (see 03), conclusions describe these listings and are a guide to the wider market.
 
@@ -55,76 +55,86 @@ The notebook computes this by hand and checks it with `scipy.stats.t.interval`; 
 
 **Type I error:** rejecting a true H0 (probability = alpha = 5%). **Type II error:** failing to reject a false H0. Statistical significance is not the same as practical importance: with n = 4,746 even small differences become significant, so we also report the size of the difference in rupees.
 
-## Test 1: Welch t-test, Mumbai vs other cities (cells 72-74)
+## Test 1: Independent two-sample t-test (Student's), Furnished vs Unfurnished (cells 72-74)
 
-- H0: mean rent in Mumbai = mean rent in the other five cities
-- H1: the means are different (two-sided)
+**Intuition.** We have two *independent* groups of properties (furnished and unfurnished). We want to know whether their population mean rents are different, or whether the gap in our sample could just be sampling chance.
 
-| | Mumbai | Other cities |
-|---|---|---|
-| n | 972 | 3,774 |
-| Mean | 85,321.20 | 22,031.45 |
-| Difference | **63,289.75** | |
-| t statistic | 18.337 | |
-| p-value | 3.02e-66 | |
+- H0: mu_furnished = mu_unfurnished
+- H1: mu_furnished is not equal to mu_unfurnished (two-sided)
 
-**Decision:** p << 0.05, reject H0. Mumbai's mean rent is about Rs. 63,000 higher. (The test says the gap is real, not why it exists.)
+**The traditional (Student's) method assumes both populations have the same variance.** The population standard deviation is unknown, so we pool the two sample variances into one common estimate:
 
-## Test 2: Welch t-test, Furnished vs Unfurnished (cells 75-77)
+s_p^2 = [(n1 - 1) s1^2 + (n2 - 1) s2^2] / (n1 + n2 - 2)
 
-- H0: mean rent of furnished = mean rent of unfurnished
-- H1: different
+t = (x1-bar - x2-bar) / ( s_p x sqrt(1/n1 + 1/n2) ), with n1 + n2 - 2 degrees of freedom, from the Student t distribution.
+
+In the notebook the pooled SD and t are calculated by hand and checked against `stats.ttest_ind(furnished, unfurnished, equal_var=True)`. `equal_var=True` is the traditional test; `equal_var=False` would be Welch's version, which we do not use.
 
 | | Furnished | Unfurnished |
 |---|---|---|
 | n | 680 | 1,815 |
 | Mean | 56,110.31 | 22,461.64 |
 | Median | 27,000 | 12,000 |
-| Difference of means | **33,648.67** | |
-| t statistic | 10.514 | |
-| p-value | 2.88e-24 | |
+| Std dev | 80,630.84 | 35,167.73 |
 
-**Decision:** reject H0. The medians show the same gap, so it is not only caused by extreme values. **Caution:** furnished flats may also be larger or more often in Mumbai (confounding), so the pure effect of furnishing is probably smaller than the raw gap. Semi-Furnished (2,251 listings) is not part of this test.
+| Quantity | Value |
+|---|---|
+| Difference of means | Rs. 33,648.67 |
+| Pooled standard deviation | Rs. 51,678.23 |
+| Degrees of freedom (680 + 1,815 - 2) | 2,493 |
+| t statistic (by hand and scipy agree) | 14.482 |
+| p-value | 1.07e-45 |
 
-## Why Welch's t-test and not the ordinary (pooled) t-test?
+**Decision:** p << 0.05, reject H0. Furnished properties have a clearly higher mean rent (about Rs. 33,649 more). The medians (27,000 vs 12,000) show the same direction, so it is not only caused by extreme rents.
 
-The ordinary independent t-test assumes both groups have the same variance. Rent in Mumbai has a much larger spread than in other cities (and furnished vs unfurnished also differ), so equal variances are not believable. Welch's version does not assume equal variances and adjusts the degrees of freedom (Welch-Satterthwaite; here 1,175.2 and 777.8 instead of n1 + n2 - 2). When variances are equal it gives almost the same answer, so it is the safer default.
+**Is the equal-variance assumption satisfied? We have not verified it.** We did not run a test for it. The sample SDs are Rs. 80,631 (furnished) and Rs. 35,168 (unfurnished), about 2.3 times apart, which suggests the assumption may not hold. We use the traditional test because it is the method taught in the course; the honest wording is "assumed, not verified, and probably not exactly true", and the t statistic and p-value should be read with that caution. With such a large difference in means the decision is unlikely to depend on this, but we have not proved that.
 
-**Independent vs paired t-test (syllabus):** independent = two *different* groups (our case). Paired = the *same* units measured twice (before/after). We have no paired data, so no paired test.
+**Other assumptions:** independent observations (each listing is a different property, reasonable) and roughly normal data. Rent is strongly skewed, so we rely on the large group sizes and the CLT instead of normal data.
 
-**Z-test (syllabus):** needs a known population SD. We do not have one, so t-tests are the correct choice; with n this large they coincide with Z tests anyway.
+**Caution on meaning:** this is a raw two-group comparison. Furnished flats may also be larger or more often in Mumbai (confounding), so the effect of furnishing alone is probably smaller than the raw gap. It shows association, not cause.
 
-## Test 3: One-way ANOVA across six cities (cells 78-80)
+### Which t-test is it? (viva)
 
-- H0: mean rent is equal in all six cities
-- H1: at least one city's mean rent differs
-
-| Test | Statistic | p-value |
+| Test | Use | Ours? |
 |---|---|---|
-| One-way ANOVA | F = 117.64 | 1.27e-117 |
-| Kruskal-Wallis (robustness check) | H = 1,613.67 | 0 (below what the computer can store) |
-| Levene (equal variances?) | 55.38 | 4.17e-56 |
+| One-sample t / Z | One group against a stated value | No |
+| **Independent two-sample t** | Two *different* groups | **Yes** |
+| Paired t | The *same* units measured twice (before/after) | No (no paired data) |
+| Z-test | Needs a known population SD | No (SD unknown; with this n it would give almost the same answer as t) |
 
-**Idea of ANOVA:** compare the variation *between* city means with the variation *within* cities: F = MSB / MSW. A large F means the city means differ more than chance would allow.
+## Test 2: One-way ANOVA across six cities (cells 75-77)
 
-**Decision:** reject H0: not all cities have the same mean rent. ANOVA only says "at least one differs", not which; the box plot and CIs show Mumbai is the main reason and Kolkata the other extreme. (A post-hoc test such as Tukey would name every pair; not done here.)
+- H0: mean rent is equal across all six cities (mu1 = mu2 = ... = mu6)
+- H1: at least one city's mean rent is different
 
-**Assumptions and what we did:**
-| Assumption | Status | What we did |
-|---|---|---|
-| Independent observations | Plausible | none needed |
-| Normal data in each group | Not true (rent is very skewed) | Large n and CLT; Kruskal-Wallis cross-check |
-| Equal variances | **Violated** (Levene p ~ 0) | Kruskal-Wallis cross-check, and Welch t-tests for the two-group comparisons |
+| Quantity | Value |
+|---|---|
+| Groups (k) / observations (N) | 6 / 4,746 |
+| Degrees of freedom | 5 (between) and 4,740 (within) |
+| F statistic | 117.64 |
+| p-value | 1.27e-117 |
 
-Both ANOVA and Kruskal-Wallis reject H0, so the conclusion does not depend on the assumption.
+**Idea of ANOVA:** compare the variation *between* the city means (MSB) with the variation *within* the cities (MSW): F = MSB / MSW, MSB = SSB/(k - 1), MSW = SSW/(N - k). A large F means the city means differ more than chance within the cities would explain.
 
-**Why ANOVA and not many t-tests?** With 6 groups there are 15 pairs; testing each at 5% inflates the chance of at least one false positive. ANOVA tests all groups in one go.
+**Decision:** reject H0: the mean rent is not the same in all six cities.
+
+**What a significant ANOVA does and does not say:** it says that *at least one* city's mean differs. It does **not** say that every city differs from every other city, and it does not say which cities differ. The city means, CIs and box plot suggest Mumbai is far above the rest and Kolkata is at the other end, but we did not run a separate test for each pair (no post-hoc test).
+
+**Why ANOVA and not many t-tests?** With 6 groups there are 15 pairs; testing each at 5% raises the chance of at least one false positive. ANOVA tests all groups in one go.
+
+**Assumptions (assumed, not verified):**
+
+| Assumption | Status |
+|---|---|
+| Independent observations | Plausible |
+| Roughly normal data in each city | Not verified; rent is strongly skewed, so we rely on the large groups (524 to 972 listings) and the CLT |
+| Equal variances in all cities | Not verified; the city SDs in the city table range from Rs. 11,137 (Kolkata) to Rs. 120,056 (Bangalore, inflated by one Rs. 35,00,000 listing), so the assumption looks doubtful |
+
+Because of this the F value and p-value should be read with caution. The size of F (117.64) and the clear gaps between the city means make the conclusion "rent differs by city" very plausible, but we have not shown that it is immune to the unequal spreads.
 
 ## Summary of the tests
 
 | Test | H0 | Statistic | p-value | Decision |
 |---|---|---|---|---|
-| Welch t: Mumbai vs others | equal means | t = 18.34 | 3.0e-66 | Reject |
-| Welch t: Furnished vs Unfurnished | equal means | t = 10.51 | 2.9e-24 | Reject |
-| One-way ANOVA, 6 cities | all means equal | F = 117.64 | 1.3e-117 | Reject |
-| Kruskal-Wallis, 6 cities | same distribution | H = 1613.67 | about 0 | Reject |
+| Independent two-sample t (Student's, pooled), Furnished vs Unfurnished | equal means | t = 14.48, df = 2,493 | 1.07e-45 | Reject |
+| One-way ANOVA, 6 cities | all means equal | F = 117.64, df = 5 and 4,740 | 1.27e-117 | Reject |

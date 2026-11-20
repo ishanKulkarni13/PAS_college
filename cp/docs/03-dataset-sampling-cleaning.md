@@ -1,6 +1,6 @@
 # 03. Dataset, Sampling and Cleaning
 
-Notebook cells 2-16 and 82. Report sections 2.1 to 2.4.
+Notebook cells 2-16 and 79. Report sections 2.1 to 2.4.
 
 ## Dataset features and variables (report 2.1)
 
@@ -57,13 +57,13 @@ Notebook cells 2-16 and 82. Report sections 2.1 to 2.4.
 | Rent <= 0 or Size <= 0 | 0 and 0 | 15 |
 | Very small sizes (< 50 sq. ft.) | 16 rows (e.g. 3 BHK with 10 or 25 sq. ft.); **kept** | 16 |
 | Extreme rents (IQR rule: outside Rs. -24,500 to Rs. 67,500) | 520 listings (about 11%); **kept** | 32 |
-| Largest rent | Rs. 35,00,000, a 3 BHK of 2,500 sq. ft. in Bangalore (the city's median is Rs. 14,000) | 87 |
+| Largest rent | Rs. 35,00,000, a 3 BHK of 2,500 sq. ft. in Bangalore (the city's median is Rs. 14,000) | 84 |
 
-**Decision: nothing was removed.** The 16 tiny sizes and the extreme rents cannot be proved to be errors; deleting them would be a choice that changes the results. Instead we report their effect (for example, how the one Rs. 35 lakh row changes the regression, cell 87) and use methods that cope with them (median, Spearman, log transform, Welch and Kruskal-Wallis tests). If sir asks: "we checked, we flagged, we did not silently delete."
+**Decision: nothing was removed.** The 16 tiny sizes and the extreme rents cannot be proved to be errors; deleting them would be a choice that changes the results. Instead we report their effect (for example, how the one Rs. 35 lakh row changes the regression, cell 84) and use methods that cope with them (median, Spearman correlation, log transform). If sir asks: "we checked, we flagged, we did not silently delete."
 
 **IQR outlier rule (cell 32):** a value is an outlier if it is below Q1 - 1.5 x IQR or above Q3 + 1.5 x IQR. With Q1 = 10,000, Q3 = 33,000, IQR = 23,000 the bounds are -24,500 and 67,500. The lower bound is negative so no low outliers exist; 520 listings are above 67,500.
 
 **Other preprocessing:**
-- City converted to 0/1 dummy columns for the multiple regression, Kolkata as baseline (cell 90).
-- Rent converted to log(Rent) for the log model (cells 36, 82).
-- 80/20 random train/test split with seed 42: 3,797 training rows and 949 test rows (cell 82).
+- City converted to 0/1 dummy columns for the multiple regression, Kolkata as baseline (cell 87).
+- Rent converted to log(Rent) for the log model (cells 36, 79).
+- 80/20 random train/test split with seed 42: 3,797 training rows and 949 test rows (cell 79).

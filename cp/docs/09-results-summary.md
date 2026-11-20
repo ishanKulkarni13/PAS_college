@@ -44,13 +44,10 @@ Every headline number, with the notebook cell it comes from. Use this page for t
 | Item | Result | Cell |
 |---|---|---|
 | 95% CI for mean rent | Rs. 32,770.75 to Rs. 37,216.16 (SE 1,133.76) | 69 |
-| Mumbai vs others (Welch t) | 85,321.20 vs 22,031.45, difference 63,289.75, t = 18.337, p = 3.02e-66 | 73 |
-| Furnished vs Unfurnished (Welch t) | 56,110.31 vs 22,461.64, difference 33,648.67, t = 10.514, p = 2.88e-24 | 76 |
-| One-way ANOVA, 6 cities | F = 117.64, p = 1.27e-117 | 79 |
-| Kruskal-Wallis | H = 1,613.67, p about 0 | 79 |
-| Levene | 55.38, p = 4.17e-56 (variances unequal) | 79 |
+| Furnished vs Unfurnished (independent two-sample t-test, equal variances assumed) | 56,110.31 vs 22,461.64, difference 33,648.67, pooled SD 51,678.23, df = 2,493, t = 14.482, p = 1.07e-45 | 73 |
+| One-way ANOVA, 6 cities | F = 117.64 (df 5 and 4,740), p = 1.27e-117 | 76 |
 
-All reject H0 at alpha = 0.05.
+Both reject H0 at alpha = 0.05. Both tests assume equal variances; this was **not verified** (group SDs: furnished 80,631 vs unfurnished 35,168; city SDs 11,137 to 120,056), so read the p-values with caution.
 
 ## Correlation (cell 54)
 
@@ -74,7 +71,7 @@ Rent-Size covariance: 20,485,348.00 (cell 47).
 | CLT, n = 30: spread of means (formula) | 12,748.17 (14,260.21) | 64 |
 | CLT, n = 100: spread of means (formula) | 7,274.49 (7,810.64) | 64 |
 
-## Regression (cells 84, 90, 91)
+## Regression (cells 81, 87, 88)
 
 | Model | Equation / key terms | Train R-sq | Test R-sq | Test MAE | Test RMSE |
 |---|---|---|---|---|---|
@@ -83,7 +80,7 @@ Rent-Size covariance: 20,485,348.00 (cell 47).
 | Multiple, log(Rent), in Rs. | BHK +26%, Bathroom +20%, Mumbai +365% vs Kolkata | 0.2812 | 0.7486 | 12,230 | 31,667 |
 
 Log model on log scale: train R-sq 0.7738, adjusted 0.7734, test 0.7913.
-Effect of the Rs. 35 lakh Bangalore listing on the simple model: train R-sq 0.1488 with it, 0.2466 without; slope 49.46 with, 46.06 without (cell 87).
+Effect of the Rs. 35 lakh Bangalore listing on the simple model: train R-sq 0.1488 with it, 0.2466 without; slope 49.46 with, 46.06 without (cell 84).
 
 ## Key findings (report 7.2)
 
@@ -91,7 +88,7 @@ Effect of the Rs. 35 lakh Bangalore listing on the simple model: train R-sq 0.14
 2. Rent is strongly right-skewed (skewness about 21): mean Rs. 34,993 is much higher than median Rs. 16,000. After a log transform the skewness is about 0.9.
 3. Mumbai has the highest average rent (Rs. 85,321) and Kolkata the lowest (Rs. 11,645): location is associated with large rent differences.
 4. 95% CI for the mean rent: Rs. 32,771 to Rs. 37,216.
-5. All three tests reject H0 at 5%: Mumbai vs others (gap about Rs. 63,290), Furnished vs Unfurnished (gap about Rs. 33,649), and ANOVA across six cities (F = 117.6; Kruskal-Wallis agrees).
+5. Both tests reject H0 at 5%: the independent two-sample t-test shows furnished properties cost more than unfurnished ones (gap about Rs. 33,649, t = 14.48, p about 1e-45), and the one-way ANOVA shows the mean rent is not the same across the six cities (F = 117.64). Both assume equal variances, which was not verified.
 6. Rent correlates moderately with Size, BHK and Bathroom (Pearson 0.37 to 0.44, Spearman 0.52 to 0.66). Size, BHK and Bathroom are strongly correlated with each other (0.72 to 0.79).
 7. LLN: sample means stabilise around the reference mean as n grows; CLT: the spread of sample means shrinks as n grows.
 8. Size alone is a weak predictor; the multiple model on log(Rent) predicts much better (test MAE about Rs. 12,230, log-scale R-squared 0.79).

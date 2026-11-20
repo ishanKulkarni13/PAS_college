@@ -157,156 +157,165 @@ The probability of getting a result at least as extreme as ours if H0 were true.
 Type I: rejecting a true H0 (probability = alpha = 0.05). Type II: failing to reject a false H0.
 
 **Q47. Which tests did you do and what were H0 and H1?**
-(1) Welch t-test, Mumbai vs other cities: H0 equal means, H1 different. (2) Welch t-test, Furnished vs Unfurnished: same hypotheses. (3) One-way ANOVA across six cities: H0 all six means equal, H1 at least one differs.
+(1) Independent two-sample t-test, Furnished vs Unfurnished: H0 the two population mean rents are equal, H1 they are different. (2) One-way ANOVA across the six cities: H0 all six mean rents are equal, H1 at least one city's mean rent is different. Significance level 0.05 for both.
 
 **Q48. Results of the tests?**
-Mumbai vs others: difference Rs. 63,290, t = 18.34, p = 3.0e-66. Furnished vs Unfurnished: difference Rs. 33,649, t = 10.51, p = 2.9e-24. ANOVA: F = 117.64, p = 1.3e-117. All reject H0.
+t-test: difference of means Rs. 33,649 (furnished higher), pooled SD Rs. 51,678, df = 2,493, t = 14.48, p = 1.07e-45, reject H0. ANOVA: F = 117.64 with 5 and 4,740 degrees of freedom, p = 1.27e-117, reject H0.
 
-**Q49. Why Welch's t-test and not the normal t-test?** (tricky)
-The ordinary t-test assumes equal variances. Mumbai's spread is far bigger than the other cities', so that is not believable. Welch's test does not assume it and adjusts the degrees of freedom; if the variances happen to be equal it gives nearly the same answer.
+**Q49. Explain the independent two-sample t-test in simple words.** (tricky)
+We have two separate groups (furnished and unfurnished properties) and ask whether their population mean rents differ. The traditional method assumes both populations have the same variance. Since we do not know the population standard deviation, we combine (pool) the two sample variances into one estimate, s_p^2 = [(n1-1)s1^2 + (n2-1)s2^2]/(n1+n2-2). The t statistic is the difference of the sample means divided by s_p x sqrt(1/n1 + 1/n2). It follows a t distribution with n1 + n2 - 2 degrees of freedom if H0 is true.
 
-**Q50. Why did you not use a Z-test? A paired t-test?**
-Z-test needs a known population SD, which we do not have (and with this n the t-test equals it anyway). A paired t-test needs the same units measured twice (before/after); we have two different groups.
+**Q50. What are the assumptions of the t-test? Are they satisfied?** (tricky)
+Independent observations, roughly normal data and equal population variances. Independence is reasonable. Normality is not true for skewed rent, so we rely on the large groups (680 and 1,815) and the CLT. Equal variances we **assumed but did not verify**; the sample SDs (Rs. 80,631 and Rs. 35,168) differ by about 2.3 times, so the assumption may not hold. We used the traditional test because it is the method taught in the course, and we say openly that the p-value should be read with that caution.
 
-**Q51. Independent vs paired t-test?**
-Independent: two different groups. Paired: the same subjects measured twice, tested on the differences.
+**Q51. If the variances look unequal, why did you still use this test?** (tricky)
+For alignment with the course method. We did not claim the assumption is verified; we state it as an assumption and as a limitation. The difference in means is very large compared with its standard error (t = 14.5), so the conclusion is unlikely to change, but we have not proved that.
 
-**Q52. Why ANOVA and not several t-tests?**
-Six cities have 15 pairs; testing each at 5% raises the chance of a false positive. ANOVA tests all groups at once.
+**Q52. Independent vs paired vs one-sample t-test?**
+Independent: two different groups (our case). Paired: the same units measured twice (before/after), tested on the differences. One-sample: one group compared with a stated value. We have no paired data and no benchmark value.
 
-**Q53. How does ANOVA work?**
-It compares variation between group means (MSB) with variation within groups (MSW); F = MSB/MSW. A large F means the group means differ more than chance explains.
+**Q53. Why a t-test and not a Z-test?**
+A Z-test needs a known population standard deviation. We do not have one, so we use the sample SD and the t distribution. With this many observations the two would give almost the same answer.
 
-**Q54. What does a significant ANOVA tell you?**
-That at least one city's mean differs; not which one. The box plot and CIs show Mumbai is the main reason. A post-hoc test (Tukey) would name the pairs; we did not run one.
+**Q54. How many degrees of freedom does the t-test have and why?**
+n1 + n2 - 2 = 680 + 1,815 - 2 = 2,493: one degree of freedom is lost for each of the two sample means used to estimate the variance.
 
-**Q55. What are ANOVA's assumptions and are they met?** (tricky)
-Independent observations, roughly normal groups and equal variances. Rent is skewed and Levene's test (p = 4e-56) shows the variances are unequal, so two assumptions are not met. We lean on the large sample, and we ran the Kruskal-Wallis test (no normality or equal-variance assumption), which also rejects H0 (H = 1,613.67).
+**Q55. How does one-way ANOVA work?**
+It compares the variation between the group means (MSB) with the variation within the groups (MSW); F = MSB/MSW, with k - 1 and N - k degrees of freedom (5 and 4,740 for us). A large F means the group means differ more than chance within the groups would explain.
 
-**Q56. What is Kruskal-Wallis?**
-A rank-based version of one-way ANOVA. It compares the groups through the ranks of the values, so it is robust to skew and outliers.
+**Q56. Why ANOVA and not several t-tests?**
+Six cities give 15 pairs; testing each at 5% raises the chance of at least one false positive. ANOVA tests all groups at once.
 
-**Q57. With n = 4,746 almost anything is significant. Does significant mean important?** (tricky)
-No. Significance only says the difference is unlikely to be chance. We therefore also report the size: Mumbai is about Rs. 63,000 higher, furnished about Rs. 33,600 higher.
+**Q57. What does a significant ANOVA tell you?** (tricky)
+Only that at least one city's mean rent is different. It does not say that every city differs from every other, and it does not say which ones differ. The city means, confidence intervals and box plot suggest Mumbai is far above the rest and Kolkata is at the other end, but we did not run tests for individual pairs.
 
-**Q58. Does the furnished vs unfurnished test prove furnishing raises rent?**
-No. Furnished flats may also be larger or more often in Mumbai (confounding). It is a raw comparison; the medians (27,000 vs 12,000) show the gap is not just due to extremes.
+**Q58. Why did you not run a post-hoc test?**
+It was outside the scope we chose for the project. A post-hoc test such as Tukey's would name the pairs of cities that differ; we list it as future scope.
 
-**Q59. Does "fail to reject H0" mean H0 is true?**
-No, only that we do not have enough evidence against it. (It did not come up in our results since all three rejected.)
+**Q59. What are ANOVA's assumptions and are they met?** (tricky)
+Independent observations, roughly normal data in each group and equal variances. We have not verified normality or equal variances. Rent is strongly skewed and the city SDs range from Rs. 11,137 (Kolkata) to Rs. 120,056 (Bangalore, inflated by one Rs. 35,00,000 listing), so the equal-variance assumption looks doubtful. The groups are large (524 to 972), which helps, but the F value and p-value should be read with caution.
+
+**Q60. With n = 4,746 almost anything is significant. Does significant mean important?** (tricky)
+No. Significance only says the difference is unlikely to be chance. We therefore also report the size of the difference: furnished flats are about Rs. 33,649 higher on average.
+
+**Q61. Does the furnished vs unfurnished test prove furnishing raises rent?**
+No. Furnished flats may also be larger or more often in Mumbai (confounding). It is a raw comparison; the medians (27,000 vs 12,000) show the gap is not just due to extreme values.
+
+**Q62. Does "fail to reject H0" mean H0 is true?**
+No, only that we do not have enough evidence against it. (It did not come up in our results, since both tests rejected H0.)
 
 ---
 
 ## E. Covariance and correlation
 
-**Q60. What is covariance?**
+**Q63. What is covariance?**
 A measure of whether two numerical variables tend to rise together (positive) or move oppositely (negative). Its size depends on the units.
 
-**Q61. What is correlation?**
+**Q64. What is correlation?**
 The strength and direction of the linear relationship between two numerical variables, between -1 and +1.
 
-**Q62. Covariance vs correlation?**
+**Q65. Covariance vs correlation?**
 Correlation = covariance / (s_X x s_Y). It is unit-free and comparable across pairs; covariance is not.
 
-**Q63. Why Rent, Size, BHK and Bathroom?**
+**Q66. Why Rent, Size, BHK and Bathroom?**
 Covariance and correlation need numerical variables. City and Furnishing Status are categorical, so they cannot go into the formulas (they are handled by t-tests, ANOVA and dummy variables).
 
-**Q64. Results?**
+**Q67. Results?**
 Pearson: Rent-Size 0.41, Rent-BHK 0.37, Rent-Bathroom 0.44 (moderate); Size-BHK 0.72, Size-Bathroom 0.74, BHK-Bathroom 0.79 (strong). Rent-Size covariance is 20,485,348, large only because the units are rupees and square feet.
 
-**Q65. What is Spearman correlation and why did you add it?**
+**Q68. What is Spearman correlation and why did you add it?**
 Pearson on the ranks. It measures consistent rising (monotonic) and is not distorted by outliers. Rent is very skewed, so we report both.
 
-**Q66. Why is Spearman higher than Pearson for Rent?**
+**Q69. Why is Spearman higher than Pearson for Rent?**
 Rent rises consistently with Size, BHK and Bathroom (Spearman 0.52, 0.57, 0.66), but a few extreme rents pull the Pearson values down (0.41, 0.37, 0.44).
 
-**Q67. Does correlation mean causation?**
+**Q70. Does correlation mean causation?**
 No. Larger flats cost more, but size is also tied to city, building quality and other factors.
 
-**Q68. Size, BHK and Bathroom correlate 0.72 to 0.79. Is that a problem?**
+**Q71. Size, BHK and Bathroom correlate 0.72 to 0.79. Is that a problem?**
 It is multicollinearity: predictions stay fine but the individual regression coefficients become less stable.
 
-**Q69. Can a correlation near zero mean there is no relationship?**
+**Q72. Can a correlation near zero mean there is no relationship?**
 No, only no linear (or monotonic) relationship; a curved relationship could still exist.
 
 ---
 
 ## F. Regression
 
-**Q70. What is regression?**
+**Q73. What is regression?**
 Fitting an equation that describes and predicts a response (Rent) from one or more predictors.
 
-**Q71. What is your simple regression model?**
+**Q74. What is your simple regression model?**
 Rent = -12,678.18 + 49.46 x Size. Each extra sq. ft. adds about Rs. 49 to the predicted rent on average.
 
-**Q72. How are the slope and intercept found?**
+**Q75. How are the slope and intercept found?**
 Least squares: b1 = sum(x - x-bar)(y - y-bar) / sum(x - x-bar)^2 and b0 = y-bar - b1 x-bar, which minimise the sum of squared errors. We check against scipy's linregress (same values).
 
-**Q73. What does the negative intercept mean?**
+**Q76. What does the negative intercept mean?**
 Nothing practical: it is the predicted rent at size 0, outside the data. It also shows the straight line is not ideal, since very small flats get negative predicted rents.
 
-**Q74. What are MAE, MSE, RMSE and R-squared?**
+**Q77. What are MAE, MSE, RMSE and R-squared?**
 MAE: average absolute error. MSE: average squared error. RMSE: its square root, in rupees. R-squared: share of the variation in Rent explained (1 = perfect, 0 = no better than the mean).
 
-**Q75. What are your simple-model results?**
+**Q78. What are your simple-model results?**
 Train R-squared 0.15, test R-squared 0.32, test MAE Rs. 27,807, test RMSE Rs. 52,189. Size alone is a weak predictor.
 
-**Q76. Why is the test R-squared higher than the training R-squared?** (tricky)
+**Q79. Why is the test R-squared higher than the training R-squared?** (tricky)
 The Rs. 35 lakh Bangalore listing fell into the training rows and inflates the training errors. Without it the training R-squared is 0.25. It shows a single extreme row can move R-squared a lot.
 
-**Q77. Why did you split the data into train and test?**
+**Q80. Why did you split the data into train and test?**
 To check how the model does on listings it has not seen; good training scores alone can hide overfitting. 80% (3,797 rows) to fit, 20% (949 rows) to test, seed 42.
 
-**Q78. What are the assumptions of linear regression? Are they met?**
+**Q81. What are the assumptions of linear regression? Are they met?**
 Linearity, independent errors, constant variance, normal errors (and no perfect multicollinearity). For raw Rent the residual plot fans out and is skewed, so constant variance and normality fail; the log model's residuals are evenly spread.
 
-**Q79. Why did you build a multiple regression and what are its predictors?**
+**Q82. Why did you build a multiple regression and what are its predictors?**
 Size alone explains little; rent also depends on rooms and city. Predictors: Size, BHK, Bathroom and City (as 0/1 dummies, Kolkata as the baseline).
 
-**Q80. What are dummy variables? Why drop one city?** (tricky)
+**Q83. What are dummy variables? Why drop one city?** (tricky)
 A categorical variable is turned into 0/1 columns, one per category. One category is dropped as the baseline; keeping all would make the columns add up to the intercept column (perfect multicollinearity, the "dummy variable trap"). Each city coefficient is the difference from Kolkata.
 
-**Q81. How do you read the log model coefficients?**
+**Q84. How do you read the log model coefficients?**
 ln(Rent) = a + b x means a one-unit rise in x multiplies rent by e^b. Mumbai b = 1.537, e^1.537 = 4.65, so rent is about 365% higher than in Kolkata for a comparable flat; each extra BHK about +26%, bathroom +20%, each 100 sq. ft. about +5%.
 
-**Q82. Which of your three models is the best and why?**
+**Q85. Which of your three models is the best and why?**
 The multiple model on log(Rent): on the test rows MAE about Rs. 12,230 against Rs. 22,345 (multiple on Rent) and Rs. 27,807 (simple); log-scale R-squared 0.77 train and 0.79 test (adjusted 0.773), so it explains about three quarters of the variation with no sign of overfitting.
 
-**Q83. The rupee R-squared for the log model on training rows is only 0.28. Is the model bad?** (tricky)
+**Q86. The rupee R-squared for the log model on training rows is only 0.28. Is the model bad?** (tricky)
 No. That number is on the rupee scale, where the Rs. 35 lakh listing dominates the total variation in the training rows. On the log scale, where the model was fitted, R-squared is 0.77. Compare models on test MAE/RMSE, and always say which scale an R-squared is on.
 
-**Q84. What is adjusted R-squared?**
+**Q87. What is adjusted R-squared?**
 R-squared penalised for the number of predictors, so adding a useless variable does not raise it. For the log model it is 0.7734 (R-squared 0.7738), so every predictor earns its place.
 
-**Q85. What is multicollinearity and does it affect predictions?**
+**Q88. What is multicollinearity and does it affect predictions?**
 Predictors that are strongly correlated with each other (Size, BHK, Bathroom, 0.72 to 0.79). Predictions are fine but individual coefficients are unstable. A VIF check would quantify it (not done).
 
-**Q86. Why does the raw multiple model say Chennai and Hyderabad are cheaper than Kolkata?**
+**Q89. Why does the raw multiple model say Chennai and Hyderabad are cheaper than Kolkata?**
 That is an artefact of fitting skewed rent with a straight-line model; after controlling for size and bathrooms the signs flip. In the log model all cities are above Kolkata, in the order of their averages.
 
-**Q87. Can you predict rent with it? Any caution?**
+**Q90. Can you predict rent with it? Any caution?**
 Yes, within the range of the data. Cautions: the back-transformed log prediction is a typical (median-like) rent, not a mean; do not extrapolate (for example above 8,000 sq. ft.); results come from one split; it shows association, not causation.
 
-**Q88. Why linear regression and not something fancier?**
+**Q91. Why linear regression and not something fancier?**
 It is what the syllabus covers and every coefficient can be explained in words.
 
 ---
 
 ## G. Conclusion and judgement
 
-**Q89. What are your main findings?**
+**Q92. What are your main findings?**
 Rent is right-skewed (mean 34,993 vs median 16,000); Mumbai is by far the dearest and Kolkata the cheapest; rent differs significantly by city and by furnishing; rent is moderately correlated with size, BHK and bathrooms; a multiple regression on log(Rent) explains about three quarters of the log-rent variation on unseen listings.
 
-**Q90. What are the limitations of your study?**
-Convenience sample from six cities and three months of 2022; a few unusual listings kept; skewed data so tests rely on large n; raw group comparisons without controls; one train/test split; association not causation.
+**Q93. What are the limitations of your study?**
+Convenience sample from six cities and three months of 2022; a few unusual listings kept; skewed data so the CI, t-test and ANOVA rely on large n; the t-test and ANOVA assume equal variances, which we did not verify (the group SDs differ a lot); no tests for individual pairs of cities; raw group comparisons without controls; one train/test split; association not causation.
 
-**Q91. What would you do next?**
+**Q94. What would you do next?**
 Add more variables (floor, locality), use cross-validation, check the extreme listings against the source, run a post-hoc Tukey test, and collect newer data from more cities.
 
-**Q92. If we gave you a new city's data, what would you do differently?**
+**Q95. If we gave you a new city's data, what would you do differently?**
 Check the sampling method first, repeat the cleaning checks and plots, and only then test and model. In particular, check whether the new data is a random sample of the market.
 
-**Q93. What did each team member do?** *(fill in before the viva; see report/NOTES.md)*
+**Q96. What did each team member do?** *(fill in before the viva; see report/NOTES.md)*
 
 ---
 

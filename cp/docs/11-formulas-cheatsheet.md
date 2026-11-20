@@ -38,13 +38,12 @@ x-bar +/- t(alpha/2, n-1) x s / sqrt(n). For 95%: alpha = 0.05; for large n, t* 
 |---|---|---|
 | One-sample Z | z = (x-bar - mu0) / (sigma / sqrt(n)) | none (needs known sigma) |
 | One-sample t | t = (x-bar - mu0) / (s / sqrt(n)) | n - 1 |
-| Independent t (pooled) | t = (x1-bar - x2-bar) / (s_p sqrt(1/n1 + 1/n2)) | n1 + n2 - 2 |
-| **Welch t (ours)** | t = (x1-bar - x2-bar) / sqrt(s1^2/n1 + s2^2/n2) | Welch-Satterthwaite approximation |
+| **Independent t, pooled (ours)** | t = (x1-bar - x2-bar) / (s_p sqrt(1/n1 + 1/n2)), s_p^2 = [(n1-1)s1^2 + (n2-1)s2^2]/(n1+n2-2) | n1 + n2 - 2 |
 | Paired t | t = d-bar / (s_d / sqrt(n)) on the differences | n - 1 |
 | **One-way ANOVA (ours)** | F = MSB / MSW; MSB = SSB/(k-1); MSW = SSW/(N-k) | k - 1 and N - k |
 
 - Decision: reject H0 if p-value < alpha (0.05).
-- Kruskal-Wallis: rank-based version of one-way ANOVA (no normality assumption). Levene: tests whether group variances are equal.
+- Both the pooled t-test and one-way ANOVA assume independent observations, roughly normal data and equal variances.
 
 ## Covariance and correlation
 

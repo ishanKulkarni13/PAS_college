@@ -74,4 +74,4 @@ Box = Q1 to Q3 (the middle 50%), line inside = median, whiskers reach up to 1.5 
 1. Rent is right-skewed, so mean > median.
 2. Location matters a lot: Mumbai is far above everyone else, Kolkata far below.
 3. Within-city variation is also huge (large SD), so city explains part of rent but not all.
-4. Skew and outliers are the reason we also use median, Spearman, log(Rent), Welch and Kruskal-Wallis.
+4. Skew and outliers are the reason we also use the median, Spearman correlation and log(Rent); the t-test and ANOVA assume equal variances and roughly normal data, which skewed rent does not satisfy well (see 06).
