@@ -2,6 +2,8 @@
 
 Grouped by topic. Numbers are from the executed notebook (see [09-results-summary.md](09-results-summary.md)). The questions marked **(tricky)** are the ones most likely to catch someone out.
 
+> **Phase III (branch `cp-phase-3`):** answers updated to match the shorter notebook: Spearman, equal-variance and multicollinearity are no longer in the notebook but are still answered here in case sir asks (Q41, Q49-51, Q59, Q68-69, Q71, Q81, Q88, Q93). Q79 and Q81 now also cover the heteroscedasticity and outlier decisions. Full list of changes: [13-phase-3-changes-from-main.md](13-phase-3-changes-from-main.md).
+
 ---
 
 ## A. Project and data
@@ -136,7 +138,7 @@ Judging a typical rent from five or ten listings can mislead; with a few hundred
 A range of plausible values for the true mean built from the sample. 95% CI for mean rent: Rs. 32,771 to Rs. 37,216.
 
 **Q41. How do you interpret a 95% confidence interval?** (tricky)
-If we repeated the sampling many times, about 95% of the intervals built this way would contain the true mean. It is wrong to say "there is a 95% chance the true mean lies in this interval".
+In simple words: we are 95% confident that the mean rent lies between Rs. 32,771 and Rs. 37,216 (this is what the notebook says). If sir asks for the formal meaning: if we repeated the sampling many times, about 95% of the intervals built this way would contain the true mean; the true mean is fixed and the interval is what varies.
 
 **Q42. Why t and not Z for the CI?**
 The population SD is unknown, so we use s and the t distribution. With 4,745 degrees of freedom t* = 1.9605, almost the same as Z's 1.96.
@@ -160,13 +162,13 @@ Type I: rejecting a true H0 (probability = alpha = 0.05). Type II: failing to re
 t-test: difference of means Rs. 33,649 (furnished higher), pooled SD Rs. 51,678, df = 2,493, t = 14.48, p = 1.07e-45, reject H0. ANOVA: F = 117.64 with 5 and 4,740 degrees of freedom, p = 1.27e-117, reject H0.
 
 **Q49. Explain the independent two-sample t-test in simple words.** (tricky)
-We have two separate groups (furnished and unfurnished properties) and ask whether their population mean rents differ. The traditional method assumes both populations have the same variance. Since we do not know the population standard deviation, we combine (pool) the two sample variances into one estimate, s_p^2 = [(n1-1)s1^2 + (n2-1)s2^2]/(n1+n2-2). The t statistic is the difference of the sample means divided by s_p x sqrt(1/n1 + 1/n2). It follows a t distribution with n1 + n2 - 2 degrees of freedom if H0 is true.
+We have two separate groups (furnished and unfurnished properties) and ask whether their population mean rents differ. This is the traditional (Student's) pooled method. Since we do not know the population standard deviation, we combine (pool) the two sample variances into one estimate, s_p^2 = [(n1-1)s1^2 + (n2-1)s2^2]/(n1+n2-2). The t statistic is the difference of the sample means divided by s_p x sqrt(1/n1 + 1/n2). It follows a t distribution with n1 + n2 - 2 degrees of freedom if H0 is true.
 
 **Q50. What are the assumptions of the t-test? Are they satisfied?** (tricky)
-Independent observations, roughly normal data and equal population variances. Independence is reasonable. Normality is not true for skewed rent, so we rely on the large groups (680 and 1,815) and the CLT. Equal variances we **assumed but did not verify**; the sample SDs (Rs. 80,631 and Rs. 35,168) differ by about 2.3 times, so the assumption may not hold. We used the traditional test because it is the method taught in the course, and we say openly that the p-value should be read with that caution.
+Independent observations and roughly normal data (the pooled version also assumes equal population variances). Independence is reasonable. Normality is not true for skewed rent, so we rely on the large groups (680 and 1,815) and the CLT. The notebook only discusses independence, normality and the confounding caution; it no longer has an equal-variance paragraph. If asked about variances: the sample SDs are Rs. 80,631 and Rs. 35,168 (about 2.3 times apart), we did not run a variance test, and we used the traditional pooled test taught in the course.
 
-**Q51. If the variances look unequal, why did you still use this test?** (tricky)
-For alignment with the course method. We did not claim the assumption is verified; we state it as an assumption and as a limitation. The difference in means is very large compared with its standard error (t = 14.5), so the conclusion is unlikely to change, but we have not proved that.
+**Q51. Why did you not use Welch's t-test?** (tricky)
+We used the traditional independent t-test taught in the course. Welch's version is the alternative that does not pool the variances; it is not in our syllabus list. The difference in means is very large compared with its standard error (t = 14.5), so the conclusion is unlikely to change, but we have not run Welch to prove that.
 
 **Q52. Independent vs paired vs one-sample t-test?**
 Independent: two different groups (our case). Paired: the same units measured twice (before/after), tested on the differences. One-sample: one group compared with a stated value. We have no paired data and no benchmark value.
@@ -190,7 +192,7 @@ Only that at least one city's mean rent is different. It does not say that every
 It was outside the scope we chose for the project. A post-hoc test such as Tukey's would name the pairs of cities that differ; we list it as future scope.
 
 **Q59. What are ANOVA's assumptions and are they met?** (tricky)
-Independent observations, roughly normal data in each group and equal variances. We have not verified normality or equal variances. Rent is strongly skewed and the city SDs range from Rs. 11,137 (Kolkata) to Rs. 120,056 (Bangalore, inflated by one Rs. 35,00,000 listing), so the equal-variance assumption looks doubtful. The groups are large (524 to 972), which helps, but the F value and p-value should be read with caution.
+Independent observations, roughly normal data in each group (and equal variances in the textbook version). Rent is strongly skewed, so normality is not true; the groups are large (524 to 972), so we rely on the CLT. The notebook does not discuss variances. If asked: the city SDs range from Rs. 11,137 (Kolkata) to Rs. 120,056 (Bangalore, inflated by one Rs. 35,00,000 listing) and we did not test equal variances.
 
 **Q60. With n = 4,746 almost anything is significant. Does significant mean important?** (tricky)
 No. Significance only says the difference is unlikely to be chance. We therefore also report the size of the difference: furnished flats are about Rs. 33,649 higher on average.
@@ -220,17 +222,17 @@ Covariance and correlation need numerical variables. City and Furnishing Status 
 **Q67. Results?**
 Pearson: Rent-Size 0.41, Rent-BHK 0.37, Rent-Bathroom 0.44 (moderate); Size-BHK 0.72, Size-Bathroom 0.74, BHK-Bathroom 0.79 (strong). Rent-Size covariance is 20,485,348, large only because the units are rupees and square feet.
 
-**Q68. What is Spearman correlation and why did you add it?**
-Pearson on the ranks. It measures consistent rising (monotonic) and is not distorted by outliers. Rent is very skewed, so we report both.
+**Q68. What is Spearman correlation? Did you use it?**
+Spearman is Pearson computed on the ranks of the values. It measures consistent rising (monotonic) and is not distorted by outliers. We did not use it in the final notebook: the project requirement says "Pearson or Spearman", so we kept Pearson. (An earlier version had both.)
 
-**Q69. Why is Spearman higher than Pearson for Rent?**
-Rent rises consistently with Size, BHK and Bathroom (Spearman 0.52, 0.57, 0.66), but a few extreme rents pull the Pearson values down (0.41, 0.37, 0.44).
+**Q69. Would Spearman have given a different answer for Rent?**
+Yes, it was higher in the earlier version (Rent-Size 0.52, Rent-BHK 0.57, Rent-Bathroom 0.66 against Pearson 0.41, 0.37, 0.44), because a few extreme rents pull Pearson down while ranks ignore how extreme a value is.
 
 **Q70. Does correlation mean causation?**
 No. Larger flats cost more, but size is also tied to city, building quality and other factors.
 
 **Q71. Size, BHK and Bathroom correlate 0.72 to 0.79. Is that a problem?**
-It is multicollinearity: predictions stay fine but the individual regression coefficients become less stable.
+Bigger flats have more rooms and bathrooms, so these three move together. For prediction it does not matter much; it only means we should not over-read any single coefficient. (The formal name is multicollinearity; the notebook does not discuss it, see Q88.)
 
 **Q72. Can a correlation near zero mean there is no relationship?**
 No, only no linear (or monotonic) relationship; a curved relationship could still exist.
@@ -258,13 +260,13 @@ MAE: average absolute error. MSE: average squared error. RMSE: its square root, 
 Train R-squared 0.15, test R-squared 0.32, test MAE Rs. 27,807, test RMSE Rs. 52,189. Size alone is a weak predictor.
 
 **Q79. Why is the test R-squared higher than the training R-squared?** (tricky)
-The Rs. 35 lakh Bangalore listing fell into the training rows and inflates the training errors. Without it the training R-squared is 0.25. It shows a single extreme row can move R-squared a lot.
+The Rs. 35 lakh Bangalore listing fell into the training rows and inflates the training errors. Without it the training R-squared is 0.25 and the slope drops from 49.5 to 46.1. One unusual listing changes the regression results, so predictions on raw rent have limits. (We kept this refit in the notebook for exactly this reason; see 08, Decisions.)
 
 **Q80. Why did you split the data into train and test?**
 To check how the model does on listings it has not seen; good training scores alone can hide overfitting. 80% (3,797 rows) to fit, 20% (949 rows) to test, seed 42.
 
 **Q81. What are the assumptions of linear regression? Are they met?**
-Linearity, independent errors, constant variance, normal errors (and no perfect multicollinearity). For raw Rent the residual plot fans out and is skewed, so constant variance and normality fail; we state this as a limitation of the regression.
+Linearity, independent errors, constant variance, normal errors (and no perfect multicollinearity). The notebook mentions one: the residual plot fans out as the predicted rent grows, so constant variance (homoscedasticity) does not hold well for raw Rent. The residuals are also skewed, so normality fails too.
 
 **Q82. Why did you build a multiple regression and what are its predictors?**
 Size alone explains little; rent also depends on rooms and city. Predictors: Size, BHK, Bathroom and City (as 0/1 dummies, Kolkata as the baseline).
@@ -285,7 +287,7 @@ It is modest, partly because the Rs. 35 lakh listing dominates the total variati
 R-squared penalised for the number of predictors, so adding a useless variable does not raise it. For the multiple model it is 0.2791 (R-squared 0.2806), almost the same, so the predictors are not just adding noise.
 
 **Q88. What is multicollinearity and does it affect predictions?**
-Predictors that are strongly correlated with each other (Size, BHK, Bathroom, 0.72 to 0.79). Predictions are fine but individual coefficients are unstable. A VIF check would quantify it (not done).
+Predictors that are strongly correlated with each other (Size, BHK, Bathroom, 0.72 to 0.79). Predictions are fine but individual coefficients are less stable. It is not in our syllabus list and not in the notebook (we dropped it on purpose, see 08, Decisions). A VIF check would quantify it (not done).
 
 **Q89. Why does the raw multiple model say Chennai and Hyderabad are cheaper than Kolkata?**
 That is an artefact of fitting skewed rent with a straight-line model; after controlling for size and bathrooms the signs flip.
@@ -304,7 +306,7 @@ It is what the syllabus covers and every coefficient can be explained in words.
 Rent is right-skewed (mean 34,993 vs median 16,000); Mumbai is by far the dearest and Kolkata the cheapest; rent differs significantly by city and by furnishing; rent is moderately correlated with size, BHK and bathrooms; a multiple regression on Rent predicts better than Size alone on unseen listings (test R-squared 0.52 against 0.32).
 
 **Q93. What are the limitations of your study?**
-Convenience sample from six cities and three months of 2022; a few unusual listings kept; skewed data so the CI, t-test and ANOVA rely on large n; the t-test and ANOVA assume equal variances, which we did not verify (the group SDs differ a lot); no tests for individual pairs of cities; raw group comparisons without controls; one train/test split; association not causation.
+Convenience sample from six cities and three months of 2022; a few unusual listings kept; skewed data so the CI, t-test and ANOVA rely on large n; no tests for individual pairs of cities; raw group comparisons without controls; one train/test split; association not causation.
 
 **Q94. What would you do next?**
 Add more variables (floor, locality), use cross-validation, check the extreme listings against the source, run a post-hoc Tukey test, and collect newer data from more cities.

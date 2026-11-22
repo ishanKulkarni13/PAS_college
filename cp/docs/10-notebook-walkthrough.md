@@ -1,6 +1,8 @@
 # 10. Notebook Walkthrough
 
-`property_location_rental_price_analysis.ipynb`: 92 cells (M = markdown, C = code). Cell numbers start at 0. Follow this order when presenting.
+> **Phase III (branch `cp-phase-3`):** the notebook now has 89 cells (it had 92). The three Spearman cells were deleted, the correlation and LLN code was simplified, and the later cells moved up by 3. The table and variable list below use the new numbers. The old-to-new cell map is in [13-phase-3-changes-from-main.md](13-phase-3-changes-from-main.md).
+
+`property_location_rental_price_analysis.ipynb`: 89 cells (M = markdown, C = code). Cell numbers start at 0. Follow this order when presenting.
 
 | Cells | Type | What happens | Why |
 |---|---|---|---|
@@ -18,18 +20,17 @@
 | 35-38 | M, C | Skewness, kurtosis, histogram, comment | Report 3.2 (new) |
 | 39-42 | M, C | City-wise count, mean, median, SD; bar chart; comment | Location analysis |
 | 43-45 | M, C | Box plot by city (log axis) and comment | Report 3.3 (new) |
-| 46-52 | M, C | Pairwise covariance and Pearson (47), correlation heatmap (49), scatter Size vs Rent (51), comments | Required covariance/correlation |
-| 53-55 | M, C | Spearman vs Pearson table and comment | Report 5.2 (new) |
-| 56-62 | M, C | LLN: reference mean (57), nested random samples (59), line plot (61), comments | Seminar topic |
-| 63-66 | M, C | CLT: 1,000 sample means for n = 30 and n = 100 (64), histograms (65), comment | Supports inference (new) |
-| 67-71 | M, C | Inference intro (alpha 0.05); 95% CI overall (69) and by city (70); comment | Report 4.1 (new) |
-| 72-74 | M, C, M | Independent two-sample t-test (Student's, pooled variance), Furnished vs Unfurnished: group summary, pooled variance, SD and standard error, t by hand, p-value from the t distribution (`stats.t.sf`), assumptions | Report 4.2-4.4 (new) |
-| 75-77 | M, C, M | One-way ANOVA across six cities (`f_oneway`), interpretation and assumptions | (new) |
-| 78-79 | M, C | Regression intro and metric definitions; train/test split; `scores()` function | Report 6 (new) |
-| 80-85 | M, C | Simple regression: fit by formula (81), fitted line (82), residuals (83), effect of the Rs. 35 lakh row (84), interpretation (85) | Report 6.1 |
-| 86-89 | M, C | Multiple regression on Rent: coefficients (87), model comparison and adjusted R-squared (88), interpretation (89) | Report 6.2-6.4 |
-| 90 | M | Key findings (8 points) | Report 7.2 |
-| 91 | M | Conclusion, limitations and future scope | Report 7.4, 8.1, 8.2 |
+| 46-52 | M, C | Covariance matrix and Pearson correlation matrix (47), correlation heatmap (49), scatter Size vs Rent (51), short comments | Required covariance/correlation |
+| 53-59 | M, C | LLN: reference mean (54), nested random samples (56), line plot (58), comments | Seminar topic |
+| 60-63 | M, C | CLT: 1,000 sample means for n = 30 and n = 100 (61), histograms (62), comment | Supports inference (new) |
+| 64-68 | M, C | Inference intro (alpha 0.05); 95% CI overall (66) and by city (67); comment | Report 4.1 (new) |
+| 69-71 | M, C, M | Independent two-sample t-test (Student's, pooled variance), Furnished vs Unfurnished: group summary, pooled variance, SD and standard error, t by hand, p-value from the t distribution (`stats.t.sf`), assumptions | Report 4.2-4.4 (new) |
+| 72-74 | M, C, M | One-way ANOVA across six cities (`f_oneway`), interpretation and assumptions | (new) |
+| 75-76 | M, C | Regression intro and metric definitions; train/test split; `scores()` function | Report 6 (new) |
+| 77-82 | M, C | Simple regression: fit by formula (78), fitted line (79), residuals (80), effect of the Rs. 35 lakh row (81), short interpretation (82) | Report 6.1 |
+| 83-86 | M, C | Multiple regression on Rent: coefficients (84), model comparison and adjusted R-squared (85), interpretation (86) | Report 6.2-6.4 |
+| 87 | M | Key findings (8 points) | Report 7.2 |
+| 88 | M | Conclusion, limitations and future scope | Report 7.4, 8.1, 8.2 |
 
 ## Key variables in the code (so you can explain any line)
 
@@ -38,22 +39,24 @@
 | `df` | The whole dataset |
 | `rent` | `df["Rent"]` |
 | `cities` | City names sorted by mean rent, highest first (cell 41) |
-| `numeric_data` | Rent, Size, BHK, Bathroom (complete rows) (cell 47) |
-| `pairwise_results` | Table of the 6 pairs with covariance, Pearson, interpretation (cell 47) |
-| `reference_mean` | Mean of all rents (cell 57) |
-| `random_rents` | Rents in one random order (cell 59) |
-| `clt_means` | Dict: n -> 1,000 sample means (cell 64) |
-| `train_idx`, `test_idx` | Row positions of the training and test sets (cell 79) |
-| `scores(actual, predicted)` | Returns MAE, MSE, RMSE, R-squared (cell 79) |
-| `slope`, `intercept` | Simple regression coefficients (cell 81) |
-| `X` | Design matrix: column of ones, Size, BHK, Bathroom, 5 city dummies (cell 87) |
-| `beta_raw` | Coefficients of the multiple model (cell 87) |
+| `numeric_data` | Rent, Size, BHK, Bathroom (cell 47) |
+| `covariance_matrix`, `correlation_matrix` | Covariance and Pearson correlation of those four columns (cell 47) |
+| `reference_mean` | Mean of all rents (cell 54) |
+| `random_rents` | Rents in one random order (cell 56) |
+| `clt_means` | Dict: n -> 1,000 sample means (cell 61) |
+| `train_idx`, `test_idx` | Row positions of the training and test sets (cell 76) |
+| `scores(actual, predicted)` | Returns MAE, MSE, RMSE, R-squared (cell 76) |
+| `slope`, `intercept` | Simple regression coefficients (cell 78) |
+| `X` | Design matrix: column of ones, Size, BHK, Bathroom, 5 city dummies (cell 84) |
+| `beta_raw` | Coefficients of the multiple model (cell 84) |
+
+Variables that no longer exist after Phase III: `pairwise_results`, `compare_corr`, `spearman_matrix` (correlation), `valid_rents`, `random_state`, `requested_sample_sizes` (LLN).
 
 ## Things you may be asked about in the code
 
 - **`rent.var()` / `rent.std()`** use n-1 by default (sample formula).
 - **`rent.sample(frac=1, random_state=42)`** shuffles all rows; the `expanding().mean()` gives the mean of the first n values for every n.
-- **`2 * stats.t.sf(abs(t_statistic), df_t)`** gives the two-tailed p-value from the Student's t distribution (`sf` is the upper-tail probability, 1 - cdf, but accurate for very small values). The pooled variance, pooled SD, standard error, t statistic and degrees of freedom are calculated by hand; the pooled-variance form assumes equal population variances.
+- **`2 * stats.t.sf(abs(t_statistic), df_t)`** gives the two-tailed p-value from the Student's t distribution (`sf` is the upper-tail probability, 1 - cdf, but accurate for very small values). The pooled variance, pooled SD, standard error, t statistic and degrees of freedom are calculated by hand.
 - **`stats.f_oneway(*groups)`** takes one array per city (the `*` unpacks the list).
 - **`np.linalg.lstsq(X, y)`** solves least squares: finds the coefficients that minimise the squared errors.
 - **`pd.get_dummies(..., columns=["City"])` then dropping `City_Kolkata`** makes 0/1 columns with Kolkata as the baseline.

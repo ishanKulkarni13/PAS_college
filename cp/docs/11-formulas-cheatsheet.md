@@ -1,5 +1,7 @@
 # 11. Formulas Cheat Sheet
 
+> **Phase III (branch `cp-phase-3`):** the notebook no longer uses Spearman (the row is kept here because the syllabus lists it), and the equal-variance remark was shortened.
+
 n = number of observations, x-bar = sample mean, s = sample standard deviation.
 
 ## Descriptive statistics
@@ -43,7 +45,7 @@ x-bar +/- t(alpha/2, n-1) x s / sqrt(n). For 95%: alpha = 0.05; for large n, t* 
 | **One-way ANOVA (ours)** | F = MSB / MSW; MSB = SSB/(k-1); MSW = SSW/(N-k) | k - 1 and N - k |
 
 - Decision: reject H0 if p-value < alpha (0.05).
-- Both the pooled t-test and one-way ANOVA assume independent observations, roughly normal data and equal variances.
+- Both the pooled t-test and one-way ANOVA assume independent observations and roughly normal data (the textbook versions also assume equal variances).
 
 ## Covariance and correlation
 
@@ -51,7 +53,7 @@ x-bar +/- t(alpha/2, n-1) x s / sqrt(n). For 95%: alpha = 0.05; for large n, t* 
 |---|---|
 | Covariance | cov(X,Y) = sum (x - x-bar)(y - y-bar) / (n - 1) |
 | Pearson r | r = cov(X,Y) / (s_X s_Y), -1 <= r <= +1 |
-| Spearman | Pearson r computed on the ranks of X and Y |
+| Spearman (syllabus topic, not used in the notebook) | Pearson r computed on the ranks of X and Y |
 | R-squared in simple regression | R-squared = r^2 |
 
 ## Regression
