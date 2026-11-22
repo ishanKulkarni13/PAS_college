@@ -1,6 +1,8 @@
 # 07. Covariance and Correlation
 
-Notebook cells 46-55. Report sections 5.1 to 5.3.
+> **Phase III (branch `cp-phase-3`):** Spearman was removed (the requirement says "Pearson or Spearman"), the code was reduced to a plain covariance matrix and correlation matrix (no empty-data check, no `to_numeric`, no automatic strength-labelling loop), and the comments under the outputs were shortened. Cell numbers updated.
+
+Notebook cells 46-52. Report sections 5.1 to 5.3.
 
 ## Selection of variables (report 5.1)
 
@@ -27,30 +29,46 @@ All covariances are positive. (Rent-Size looks huge only because Rent is in rupe
 
 r = cov(X, Y) / (s_X x s_Y), between -1 and +1. Measures the strength of the **straight-line** relationship.
 
-Strength bands used in the notebook (rough guide, not a universal rule): |r| below 0.10 negligible, 0.10 to 0.30 weak, 0.30 to 0.50 moderate, 0.50 or more strong.
+Rough guide for describing r (not a universal rule): |r| below 0.10 negligible, 0.10 to 0.30 weak, 0.30 to 0.50 moderate, 0.50 or more strong. The notebook used to label each pair automatically with these bands; now the comment under the output just says "moderate" or "strong" in words.
 
-## Spearman correlation (cells 53-55)
+### Pearson results (cell 47)
 
-Spearman correlation is Pearson's correlation applied to the **ranks** of the values. It measures whether one variable consistently rises when the other does (a *monotonic* relationship), not necessarily a straight line, and it is not distorted by extreme values.
+| Pair | Pearson r | How we describe it |
+|---|---|---|
+| Rent and Size | 0.4136 | moderate |
+| Rent and BHK | 0.3697 | moderate |
+| Rent and Bathroom | 0.4412 | moderate |
+| Size and BHK | 0.7161 | strong |
+| Size and Bathroom | 0.7407 | strong |
+| BHK and Bathroom | 0.7949 | strong |
 
-## Pearson vs Spearman (cell 54)
+## Spearman correlation (removed in Phase III)
 
-| Pair | Pearson | Spearman | Pearson strength |
-|---|---|---|---|
-| Rent and Size | 0.4136 | 0.5214 | moderate |
-| Rent and BHK | 0.3697 | 0.5684 | moderate |
-| Rent and Bathroom | 0.4412 | 0.6630 | moderate |
-| Size and BHK | 0.7161 | 0.7551 | strong |
-| Size and Bathroom | 0.7407 | 0.7221 | strong |
-| BHK and Bathroom | 0.7949 | 0.7906 | strong |
+Spearman is Pearson's correlation applied to the **ranks** of the values. It was in the notebook until Phase II (three cells: why Spearman, a Pearson vs Spearman table, a comment) and has been **removed**.
+
+**Why removed:** the official project requirement says "Pearson **or** Spearman correlation analysis with interpretation", so one of them is enough. Pearson is the simpler one and the covariance/Pearson cell already covers it. Keeping both made the notebook look like a checklist.
+
+**What it showed (kept here only for viva):**
+
+| Pair | Pearson | Spearman |
+|---|---|---|
+| Rent and Size | 0.4136 | 0.5214 |
+| Rent and BHK | 0.3697 | 0.5684 |
+| Rent and Bathroom | 0.4412 | 0.6630 |
+| Size and BHK | 0.7161 | 0.7551 |
+| Size and Bathroom | 0.7407 | 0.7221 |
+| BHK and Bathroom | 0.7949 | 0.7906 |
+
+Spearman was higher than Pearson for every pair with Rent, because a few extreme rents pull Pearson down while ranks ignore how extreme a value is.
+
+**Heads-up:** the syllabus topic list says "Covariance and Correlation (Pearson & Spearman)", so sir may still ask what Spearman is (VIVA Q68). The answer is in [VIVA.md](VIVA.md). To bring it back, restore cells 53-55 of the `main` branch notebook.
 
 ## Interpretation (report 5.3)
 
 1. **Rent is moderately related to Size, BHK and Bathroom** (Pearson 0.37 to 0.44). Bigger properties with more rooms tend to cost more, but the relationship is far from perfect: city, furnishing and location quality also matter.
-2. **Spearman is higher than Pearson for every pair that includes Rent** (e.g. Rent-Bathroom 0.66 vs 0.44). Rent rises consistently with these attributes, but extreme rents drag the Pearson value down. When data has outliers, Spearman describes the pattern better; this is why we report both.
-3. **Size, BHK and Bathroom are strongly correlated with each other** (0.72 to 0.79): bigger flats have more bedrooms and bathrooms. This is **multicollinearity**, which matters for regression (see 08): the individual coefficients of these three variables are less stable.
-4. **Correlation is not causation.** A moderate Rent-Size correlation does not mean adding area *causes* rent to rise; other factors (city, building quality) move with both.
-5. **Correlation measures linear/monotonic association only.** A value near zero would not rule out a curved relationship.
+2. **Size, BHK and Bathroom are strongly correlated with each other** (0.72 to 0.79): bigger flats have more bedrooms and bathrooms. (The regression consequence of this, multicollinearity, is deliberately not discussed in the notebook; see the decision in 08.)
+3. **Correlation is not causation.** A moderate Rent-Size correlation does not mean adding area *causes* rent to rise; other factors (city, building quality) move with both.
+4. **Correlation measures linear association only.** A value near zero would not rule out a curved relationship.
 
 ## The plots
 

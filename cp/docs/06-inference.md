@@ -1,10 +1,12 @@
 # 06. Statistical Inference: Confidence Interval and Hypothesis Tests
 
-Notebook cells 67-77. Report sections 4.1 to 4.4.
+> **Phase III (branch `cp-phase-3`):** the equal-variance caveats were removed from the notebook and from this doc (they used to be in the t-test text, the ANOVA text, the key findings and the limitations), and the CI interpretation was simplified. Be ready for the question "why not Welch's t-test?" (answer in VIVA Q51). Details: [13](13-phase-3-changes-from-main.md).
+
+Notebook cells 64-74. Report sections 4.1 to 4.4.
 
 **Inference = using a sample to say something about a bigger group.** Here the "bigger group" is the rental market, and our sample is the 4,746 listings. Since it is a convenience sample (see 03), conclusions describe these listings and are a guide to the wider market.
 
-## Estimation and the 95% confidence interval (cells 68-71)
+## Estimation and the 95% confidence interval (cells 65-68)
 
 **Point estimate:** the sample mean, Rs. 34,993.45.
 **Interval estimate (95% CI):**
@@ -21,13 +23,15 @@ CI = x-bar +/- t* x s / sqrt(n)
 | Margin of error | about 2,222.7 |
 | **95% CI** | **Rs. 32,770.75 to Rs. 37,216.16** |
 
-The notebook computes this by hand from the formula above (cell 69).
+The notebook computes this by hand from the formula above (cell 66).
 
 **Why t and not Z?** The population standard deviation is unknown, so we use s and the t distribution. With 4,745 degrees of freedom t* is practically 1.96, so the result is almost the same as a Z interval.
 
-**Correct interpretation:** if we repeated the sampling many times and built an interval each time, about 95% of those intervals would contain the true mean. It is *wrong* to say "there is a 95% probability that the true mean is in this interval": the true mean is fixed, the interval is what varies.
+**Interpretation (as written in the notebook):** we are 95% confident that the mean rent lies in this range.
 
-### CI by city (cell 70)
+**If sir pushes for the formal meaning:** if we repeated the sampling many times and built an interval each time, about 95% of those intervals would contain the true mean. The notebook no longer spells this out; it was toned down on purpose (see the Phase III note above).
+
+### CI by city (cell 67)
 
 | City | Count | Mean | CI lower | CI upper |
 |---|---|---|---|---|
@@ -55,20 +59,20 @@ The notebook computes this by hand from the formula above (cell 69).
 
 **Type I error:** rejecting a true H0 (probability = alpha = 5%). **Type II error:** failing to reject a false H0. Statistical significance is not the same as practical importance: with n = 4,746 even small differences become significant, so we also report the size of the difference in rupees.
 
-## Test 1: Independent two-sample t-test (Student's), Furnished vs Unfurnished (cells 72-74)
+## Test 1: Independent two-sample t-test (Student's), Furnished vs Unfurnished (cells 69-71)
 
 **Intuition.** We have two *independent* groups of properties (furnished and unfurnished). We want to know whether their population mean rents are different, or whether the gap in our sample could just be sampling chance.
 
 - H0: mu_furnished = mu_unfurnished
 - H1: mu_furnished is not equal to mu_unfurnished (two-sided)
 
-**The traditional (Student's) method assumes both populations have the same variance.** The population standard deviation is unknown, so we pool the two sample variances into one common estimate:
+**This is the traditional (Student's) pooled method.** The population standard deviation is unknown, so we pool the two sample variances into one common estimate:
 
 s_p^2 = [(n1 - 1) s1^2 + (n2 - 1) s2^2] / (n1 + n2 - 2)
 
 t = (x1-bar - x2-bar) / ( s_p x sqrt(1/n1 + 1/n2) ), with n1 + n2 - 2 degrees of freedom, from the Student t distribution.
 
-In the notebook the pooled variance, pooled SD, standard error, t statistic and degrees of freedom are all calculated by hand. SciPy's Student's t distribution is used only for the two-tailed p-value, `p = 2 * stats.t.sf(abs(t), df)`, using our own t and df, and p is compared with alpha = 0.05. We use the traditional equal-variance (pooled) test; Welch's version, which does not assume equal variances, is not used.
+In the notebook the pooled variance, pooled SD, standard error, t statistic and degrees of freedom are all calculated by hand. SciPy's Student's t distribution is used only for the two-tailed p-value, `p = 2 * stats.t.sf(abs(t), df)`, using our own t and df, and p is compared with alpha = 0.05. We use the traditional pooled test taught in the course; Welch's version is not used.
 
 | | Furnished | Unfurnished |
 |---|---|---|
@@ -87,9 +91,7 @@ In the notebook the pooled variance, pooled SD, standard error, t statistic and 
 
 **Decision:** p << 0.05, reject H0. Furnished properties have a clearly higher mean rent (about Rs. 33,649 more). The medians (27,000 vs 12,000) show the same direction, so it is not only caused by extreme rents.
 
-**Is the equal-variance assumption satisfied? We have not verified it.** We did not run a test for it. The sample SDs are Rs. 80,631 (furnished) and Rs. 35,168 (unfurnished), about 2.3 times apart, which suggests the assumption may not hold. We use the traditional test because it is the method taught in the course; the honest wording is "assumed, not verified, and probably not exactly true", and the t statistic and p-value should be read with that caution. With such a large difference in means the decision is unlikely to depend on this, but we have not proved that.
-
-**Other assumptions:** independent observations (each listing is a different property, reasonable) and roughly normal data. Rent is strongly skewed, so we rely on the large group sizes and the CLT instead of normal data.
+**Assumptions:** independent observations (each listing is a different property, reasonable) and roughly normal data. Rent is strongly skewed, so we rely on the large group sizes and the CLT instead of normal data.
 
 **Caution on meaning:** this is a raw two-group comparison. Furnished flats may also be larger or more often in Mumbai (confounding), so the effect of furnishing alone is probably smaller than the raw gap. It shows association, not cause.
 
@@ -102,7 +104,7 @@ In the notebook the pooled variance, pooled SD, standard error, t statistic and 
 | Paired t | The *same* units measured twice (before/after) | No (no paired data) |
 | Z-test | Needs a known population SD | No (SD unknown; with this n it would give almost the same answer as t) |
 
-## Test 2: One-way ANOVA across six cities (cells 75-77)
+## Test 2: One-way ANOVA across six cities (cells 72-74)
 
 - H0: mean rent is equal across all six cities (mu1 = mu2 = ... = mu6)
 - H1: at least one city's mean rent is different
@@ -122,15 +124,14 @@ In the notebook the pooled variance, pooled SD, standard error, t statistic and 
 
 **Why ANOVA and not many t-tests?** With 6 groups there are 15 pairs; testing each at 5% raises the chance of at least one false positive. ANOVA tests all groups in one go.
 
-**Assumptions (assumed, not verified):**
+**Assumptions:**
 
 | Assumption | Status |
 |---|---|
 | Independent observations | Plausible |
-| Roughly normal data in each city | Not verified; rent is strongly skewed, so we rely on the large groups (524 to 972 listings) and the CLT |
-| Equal variances in all cities | Not verified; the city SDs in the city table range from Rs. 11,137 (Kolkata) to Rs. 120,056 (Bangalore, inflated by one Rs. 35,00,000 listing), so the assumption looks doubtful |
+| Roughly normal data in each city | Not exactly true; rent is strongly skewed, so we rely on the large groups (524 to 972 listings) and the CLT |
 
-Because of this the F value and p-value should be read with caution. The size of F (117.64) and the clear gaps between the city means make the conclusion "rent differs by city" very plausible, but we have not shown that it is immune to the unequal spreads.
+The size of F (117.64) and the clear gaps between the city means make the conclusion "rent differs by city" very plausible.
 
 ## Summary of the tests
 

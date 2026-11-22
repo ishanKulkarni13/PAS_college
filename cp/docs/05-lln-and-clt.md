@@ -1,16 +1,18 @@
 # 05. Law of Large Numbers and Central Limit Theorem
 
-Notebook cells 56-66. This is the group seminar topic (LLN) plus the CLT, which supports the inference chapter.
+> **Phase III (branch `cp-phase-3`):** cell numbers updated. The LLN code is simpler now: the `to_numeric`/`dropna` step, the empty-data `ValueError`s and the `isinstance` filter on the sample sizes were removed, and `reference_mean` is taken straight from `rent.mean()`. The numbers in the results table below are identical to before (same seed, same shuffle).
 
-## Law of Large Numbers (LLN), cells 56-62
+Notebook cells 53-63. This is the group seminar topic (LLN) plus the CLT, which supports the inference chapter.
+
+## Law of Large Numbers (LLN), cells 53-59
 
 **Statement:** as the number of independent observations grows, the sample mean gets closer to the true mean of the distribution (it becomes more stable).
 
 **Our design:**
-1. **Reference mean** = mean of all 4,746 listings = Rs. 34,993.45 (cell 57). We call it the "reference mean", *not* the population mean, because our data is a collected sample, not every rental property in India.
-2. Shuffle all 4,746 rents once with `sample(frac=1, random_state=42)` (cell 59). Every listing is in the shuffled list exactly once.
+1. **Reference mean** = mean of all 4,746 listings = Rs. 34,993.45 (cell 54). We call it the "reference mean", *not* the population mean, because our data is a collected sample, not every rental property in India.
+2. Shuffle all 4,746 rents once with `sample(frac=1, random_state=42)` (cell 56). Every listing is in the shuffled list exactly once.
 3. For sizes 10, 25, 50, 100, 250, 500, 1000, 2000, 3000, 4000 take the **first n rents of the shuffled list**; each sample is a *subset of the next bigger one* (nested). The mean of each is computed with an expanding mean.
-4. Compare each sample mean with the reference mean and plot (cell 61).
+4. Compare each sample mean with the reference mean and plot (cell 58).
 
 **Why a random shuffle instead of the first n rows of the file?** Rows are ordered by city (Kolkata, Mumbai, ...), so the first n rows would all be from one city. A random shuffle gives every listing the same chance of being in a sample.
 
@@ -20,7 +22,7 @@ Notebook cells 56-66. This is the group seminar topic (LLN) plus the CLT, which 
 
 **Why a fixed seed (`random_state=42`):** the result is reproducible; sir sees the same table every time.
 
-### Results (cell 59)
+### Results (cell 56)
 
 | Sample size | Sample mean (Rs.) | Difference from reference (Rs.) |
 |---|---|---|
@@ -41,7 +43,7 @@ Notebook cells 56-66. This is the group seminar topic (LLN) plus the CLT, which 
 
 **Careful wording:** this finite-data demonstration illustrates LLN; it does not prove that the listings represent every rental in India.
 
-## Central Limit Theorem (CLT), cells 63-66
+## Central Limit Theorem (CLT), cells 60-63
 
 **Statement:** the means of many random samples of size n are approximately normal, with mean mu and standard error sigma/sqrt(n), even when the data are not normal (for large enough n).
 
@@ -67,4 +69,4 @@ Notebook cells 56-66. This is the group seminar topic (LLN) plus the CLT, which 
 
 ## Sampling distribution and standard error
 
-The **sampling distribution of the mean** is the distribution of x-bar over all possible samples of size n. Its standard deviation is the **standard error** SE = s/sqrt(n). A bigger n means a smaller SE, a narrower confidence interval and a more reliable estimate. For the full dataset SE = 78,106.41 / sqrt(4,746) = Rs. 1,133.76 (cell 69).
+The **sampling distribution of the mean** is the distribution of x-bar over all possible samples of size n. Its standard deviation is the **standard error** SE = s/sqrt(n). A bigger n means a smaller SE, a narrower confidence interval and a more reliable estimate. For the full dataset SE = 78,106.41 / sqrt(4,746) = Rs. 1,133.76 (cell 66).

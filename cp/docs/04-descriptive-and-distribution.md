@@ -1,5 +1,7 @@
 # 04. Descriptive Statistics, Distribution and City Comparison
 
+> **Phase III (branch `cp-phase-3`):** no change in content. Spearman and equal-variance remarks were removed from the observations list at the bottom.
+
 Notebook cells 17-45. Report sections 3.1 to 3.4.
 
 ## Descriptive statistics of Rent (report 3.1)
@@ -73,4 +75,4 @@ Box = Q1 to Q3 (the middle 50%), line inside = median, whiskers reach up to 1.5 
 1. Rent is right-skewed, so mean > median.
 2. Location matters a lot: Mumbai is far above everyone else, Kolkata far below.
 3. Within-city variation is also huge (large SD), so city explains part of rent but not all.
-4. Skew and outliers are the reason we also use the median and Spearman correlation; the t-test and ANOVA assume equal variances and roughly normal data, which skewed rent does not satisfy well (see 06).
+4. Skew and outliers are the reason we also report the median; the t-test and ANOVA assume roughly normal data, which skewed rent does not satisfy well, so we lean on the large sample (see 05 and 06).

@@ -1,5 +1,7 @@
 # 09. Results Summary
 
+> **Phase III (branch `cp-phase-3`):** cell numbers updated; the Spearman table, the equal-variance remarks and the Spearman values in the findings were removed; the conclusion paragraph said "three hypothesis tests" but there are two (t-test and ANOVA), now fixed. All other numbers are unchanged.
+
 Every headline number, with the notebook cell it comes from. Use this page for the report (Chapter 7) and for quick answers. All values are from the executed notebook.
 
 ## Data
@@ -42,35 +44,35 @@ Every headline number, with the notebook cell it comes from. Use this page for t
 
 | Item | Result | Cell |
 |---|---|---|
-| 95% CI for mean rent | Rs. 32,770.75 to Rs. 37,216.16 (SE 1,133.76) | 69 |
-| Furnished vs Unfurnished (independent two-sample t-test, equal variances assumed) | 56,110.31 vs 22,461.64, difference 33,648.67, pooled SD 51,678.23, df = 2,493, t = 14.482, p = 1.07e-45 | 73 |
-| One-way ANOVA, 6 cities | F = 117.64 (df 5 and 4,740), p = 1.27e-117 | 76 |
+| 95% CI for mean rent | Rs. 32,770.75 to Rs. 37,216.16 (SE 1,133.76) | 66 |
+| Furnished vs Unfurnished (independent two-sample t-test, pooled) | 56,110.31 vs 22,461.64, difference 33,648.67, pooled SD 51,678.23, df = 2,493, t = 14.482, p = 1.07e-45 | 70 |
+| One-way ANOVA, 6 cities | F = 117.64 (df 5 and 4,740), p = 1.27e-117 | 73 |
 
-Both reject H0 at alpha = 0.05. Both tests assume equal variances; this was **not verified** (group SDs: furnished 80,631 vs unfurnished 35,168; city SDs 11,137 to 120,056), so read the p-values with caution.
+Both reject H0 at alpha = 0.05.
 
-## Correlation (cell 54)
+## Correlation (cell 47)
 
-| Pair | Pearson | Spearman |
-|---|---|---|
-| Rent and Size | 0.4136 | 0.5214 |
-| Rent and BHK | 0.3697 | 0.5684 |
-| Rent and Bathroom | 0.4412 | 0.6630 |
-| Size and BHK | 0.7161 | 0.7551 |
-| Size and Bathroom | 0.7407 | 0.7221 |
-| BHK and Bathroom | 0.7949 | 0.7906 |
+| Pair | Pearson |
+|---|---|
+| Rent and Size | 0.4136 |
+| Rent and BHK | 0.3697 |
+| Rent and Bathroom | 0.4412 |
+| Size and BHK | 0.7161 |
+| Size and Bathroom | 0.7407 |
+| BHK and Bathroom | 0.7949 |
 
-Rent-Size covariance: 20,485,348.00 (cell 47).
+Rent-Size covariance: 20,485,348.00 (cell 47). Spearman values were removed from the notebook; see [07](07-correlation.md).
 
 ## LLN and CLT
 
 | Item | Result | Cell |
 |---|---|---|
-| Reference mean | Rs. 34,993.45 | 57 |
-| Sample mean at n = 10 / 100 / 1000 / 4000 | 60,850.00 / 41,134.99 / 34,495.06 / 35,394.75 | 59 |
-| CLT, n = 30: spread of means (formula) | 12,748.17 (14,260.21) | 64 |
-| CLT, n = 100: spread of means (formula) | 7,274.49 (7,810.64) | 64 |
+| Reference mean | Rs. 34,993.45 | 54 |
+| Sample mean at n = 10 / 100 / 1000 / 4000 | 60,850.00 / 41,134.99 / 34,495.06 / 35,394.75 | 56 |
+| CLT, n = 30: spread of means (formula) | 12,748.17 (14,260.21) | 61 |
+| CLT, n = 100: spread of means (formula) | 7,274.49 (7,810.64) | 61 |
 
-## Regression (cells 81, 87, 88)
+## Regression (cells 78, 84, 85)
 
 | Model | Equation / key terms | Train R-sq | Test R-sq | Test MAE | Test RMSE |
 |---|---|---|---|---|---|
@@ -78,7 +80,7 @@ Rent-Size covariance: 20,485,348.00 (cell 47).
 | Multiple, Rent | Size 38.28, BHK 3,450, Bathroom 12,035, Mumbai +58,371 vs Kolkata | 0.2806 | 0.5204 | 22,345 | 43,739 |
 
 Multiple model adjusted R-sq (train): 0.2791.
-Effect of the Rs. 35 lakh Bangalore listing on the simple model: train R-sq 0.1488 with it, 0.2466 without; slope 49.46 with, 46.06 without (cell 84).
+Effect of the Rs. 35 lakh Bangalore listing on the simple model: train R-sq 0.1488 with it, 0.2466 without; slope 49.46 with, 46.06 without (cell 81).
 
 ## Key findings (report 7.2)
 
@@ -86,11 +88,11 @@ Effect of the Rs. 35 lakh Bangalore listing on the simple model: train R-sq 0.14
 2. Rent is strongly right-skewed (skewness about 21): mean Rs. 34,993 is much higher than median Rs. 16,000.
 3. Mumbai has the highest average rent (Rs. 85,321) and Kolkata the lowest (Rs. 11,645): location is associated with large rent differences.
 4. 95% CI for the mean rent: Rs. 32,771 to Rs. 37,216.
-5. Both tests reject H0 at 5%: the independent two-sample t-test shows furnished properties cost more than unfurnished ones (gap about Rs. 33,649, t = 14.48, p about 1e-45), and the one-way ANOVA shows the mean rent is not the same across the six cities (F = 117.64). Both assume equal variances, which was not verified.
-6. Rent correlates moderately with Size, BHK and Bathroom (Pearson 0.37 to 0.44, Spearman 0.52 to 0.66). Size, BHK and Bathroom are strongly correlated with each other (0.72 to 0.79).
+5. Both tests reject H0 at 5%: the independent two-sample t-test shows furnished properties cost more than unfurnished ones (gap about Rs. 33,649, t = 14.48, p about 1e-45), and the one-way ANOVA shows the mean rent is not the same across the six cities (F = 117.64).
+6. Rent correlates moderately with Size, BHK and Bathroom (Pearson 0.37 to 0.44). Size, BHK and Bathroom are strongly correlated with each other (0.72 to 0.79).
 7. LLN: sample means stabilise around the reference mean as n grows; CLT: the spread of sample means shrinks as n grows.
 8. Size alone is a weak predictor; the multiple model on Rent predicts better (test MAE about Rs. 22,345, test R-squared 0.52).
 
 ## Conclusion paragraph (report 8.1, short form)
 
-Rental prices in the dataset are strongly spread and right-skewed, and location is associated with large differences: Mumbai is the most expensive city and Kolkata the cheapest. Confidence intervals and three hypothesis tests confirm that rent differs significantly by city and by furnishing status. Rent has a moderate positive association with size, BHK and bathrooms, and a multiple regression on Rent with those variables and city predicts better than size alone on unseen listings (test R-squared 0.52 against 0.32), although much of the variation in rent remains unexplained. The Law of Large Numbers and the Central Limit Theorem were illustrated with random samples. All relationships are descriptive, not causal, and the data is a non-random collection of listings from six cities in 2022.
+Rental prices in the dataset are strongly spread and right-skewed, and location is associated with large differences: Mumbai is the most expensive city and Kolkata the cheapest. Confidence intervals and two hypothesis tests confirm that rent differs significantly by city and by furnishing status. Rent has a moderate positive association with size, BHK and bathrooms, and a multiple regression on Rent with those variables and city predicts better than size alone on unseen listings (test R-squared 0.52 against 0.32), although much of the variation in rent remains unexplained. The Law of Large Numbers and the Central Limit Theorem were illustrated with random samples. All relationships are descriptive, not causal, and the data is a non-random collection of listings from six cities in 2022.

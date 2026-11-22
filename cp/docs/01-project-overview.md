@@ -1,5 +1,7 @@
 # 01. Project Overview
 
+> **Phase III (branch `cp-phase-3`):** cell numbers below are the new ones (the notebook now has 89 cells; the Spearman cells were deleted, so everything after the correlation section moved up by 3). Full list of changes: [13](13-phase-3-changes-from-main.md).
+
 ## Topic and objective
 
 **Topic:** Property Location and Rental Price Analysis.
@@ -40,18 +42,18 @@ Result interpretation -> Conclusion
 | Load, check, classify variables | cells 2-13 | 03 |
 | Cleaning | cells 6-7, 14-16 | 03 |
 | Descriptive statistics, distribution, city comparison | cells 17-45 | 04 |
-| Correlation | cells 46-55 | 07 |
-| LLN and CLT | cells 56-66 | 05 |
-| Confidence interval and hypothesis tests | cells 67-77 | 06 |
-| Regression | cells 78-89 | 08 |
-| Findings and conclusion | cells 90-91 | 09, 12 |
+| Correlation | cells 46-52 | 07 |
+| LLN and CLT | cells 53-63 | 05 |
+| Confidence interval and hypothesis tests | cells 64-74 | 06 |
+| Regression | cells 75-86 | 08 |
+| Findings and conclusion | cells 87-88 | 09, 12 |
 
 ## Key results in five sentences
 
 1. Rent is strongly right-skewed: mean Rs. 34,993 against median Rs. 16,000, because a few very expensive listings pull the mean up.
 2. Mumbai is by far the most expensive city (mean Rs. 85,321) and Kolkata the cheapest (mean Rs. 11,645); the 95% CI for the overall mean is Rs. 32,771 to Rs. 37,216.
-3. Both hypothesis tests are significant at 5%: the independent two-sample t-test (Furnished vs Unfurnished) and the one-way ANOVA across the six cities. Both assume equal variances, which we did not verify (see 06).
-4. Rent has a moderate positive correlation with Size (Pearson 0.41), BHK (0.37) and Bathroom (0.44); Spearman values are higher (0.52, 0.57, 0.66).
+3. Both hypothesis tests are significant at 5%: the independent two-sample t-test (Furnished vs Unfurnished) and the one-way ANOVA across the six cities.
+4. Rent has a moderate positive correlation with Size (Pearson 0.41), BHK (0.37) and Bathroom (0.44).
 5. Size alone is a weak predictor (test R-squared 0.32); a multiple regression on Rent with Size, BHK, Bathroom and City is better (test MAE about Rs. 22,345, test R-squared 0.52).
 
 ## What we did NOT do (and why)
