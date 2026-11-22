@@ -26,7 +26,6 @@ Every headline number, with the notebook cell it comes from. Use this page for t
 | Min, max, range | 1,200; 35,00,000; 34,98,800 | 31 |
 | IQR outliers (above 67,500) | 520 listings | 32 |
 | Skewness / excess kurtosis | 21.41 / 841.11 | 36 |
-| Skewness / excess kurtosis of log(Rent) | 0.91 / 0.88 | 36 |
 
 ## City comparison (cell 40)
 
@@ -77,22 +76,21 @@ Rent-Size covariance: 20,485,348.00 (cell 47).
 |---|---|---|---|---|---|
 | Simple | Rent = -12,678.18 + 49.46 x Size | 0.1488 | 0.3172 | 27,807 | 52,189 |
 | Multiple, Rent | Size 38.28, BHK 3,450, Bathroom 12,035, Mumbai +58,371 vs Kolkata | 0.2806 | 0.5204 | 22,345 | 43,739 |
-| Multiple, log(Rent), in Rs. | BHK +26%, Bathroom +20%, Mumbai +365% vs Kolkata | 0.2812 | 0.7486 | 12,230 | 31,667 |
 
-Log model on log scale: train R-sq 0.7738, adjusted 0.7734, test 0.7913.
+Multiple model adjusted R-sq (train): 0.2791.
 Effect of the Rs. 35 lakh Bangalore listing on the simple model: train R-sq 0.1488 with it, 0.2466 without; slope 49.46 with, 46.06 without (cell 84).
 
 ## Key findings (report 7.2)
 
 1. 4,746 listings, 6 cities, 12 columns, no missing values or duplicates.
-2. Rent is strongly right-skewed (skewness about 21): mean Rs. 34,993 is much higher than median Rs. 16,000. After a log transform the skewness is about 0.9.
+2. Rent is strongly right-skewed (skewness about 21): mean Rs. 34,993 is much higher than median Rs. 16,000.
 3. Mumbai has the highest average rent (Rs. 85,321) and Kolkata the lowest (Rs. 11,645): location is associated with large rent differences.
 4. 95% CI for the mean rent: Rs. 32,771 to Rs. 37,216.
 5. Both tests reject H0 at 5%: the independent two-sample t-test shows furnished properties cost more than unfurnished ones (gap about Rs. 33,649, t = 14.48, p about 1e-45), and the one-way ANOVA shows the mean rent is not the same across the six cities (F = 117.64). Both assume equal variances, which was not verified.
 6. Rent correlates moderately with Size, BHK and Bathroom (Pearson 0.37 to 0.44, Spearman 0.52 to 0.66). Size, BHK and Bathroom are strongly correlated with each other (0.72 to 0.79).
 7. LLN: sample means stabilise around the reference mean as n grows; CLT: the spread of sample means shrinks as n grows.
-8. Size alone is a weak predictor; the multiple model on log(Rent) predicts much better (test MAE about Rs. 12,230, log-scale R-squared 0.79).
+8. Size alone is a weak predictor; the multiple model on Rent predicts better (test MAE about Rs. 22,345, test R-squared 0.52).
 
 ## Conclusion paragraph (report 8.1, short form)
 
-Rental prices in the dataset are strongly spread and right-skewed, and location is associated with large differences: Mumbai is the most expensive city and Kolkata the cheapest. Confidence intervals and three hypothesis tests confirm that rent differs significantly by city and by furnishing status. Rent has a moderate positive association with size, BHK and bathrooms, and a multiple regression on log(Rent) with those variables and city explains about three quarters of the variation in log-rent on unseen listings. The Law of Large Numbers and the Central Limit Theorem were illustrated with random samples. All relationships are descriptive, not causal, and the data is a non-random collection of listings from six cities in 2022.
+Rental prices in the dataset are strongly spread and right-skewed, and location is associated with large differences: Mumbai is the most expensive city and Kolkata the cheapest. Confidence intervals and three hypothesis tests confirm that rent differs significantly by city and by furnishing status. Rent has a moderate positive association with size, BHK and bathrooms, and a multiple regression on Rent with those variables and city predicts better than size alone on unseen listings (test R-squared 0.52 against 0.32), although much of the variation in rent remains unexplained. The Law of Large Numbers and the Central Limit Theorem were illustrated with random samples. All relationships are descriptive, not causal, and the data is a non-random collection of listings from six cities in 2022.

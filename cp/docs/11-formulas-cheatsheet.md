@@ -69,7 +69,6 @@ x-bar +/- t(alpha/2, n-1) x s / sqrt(n). For 95%: alpha = 0.05; for large n, t* 
 | MAE | mean of abs(e) |
 | MSE | mean of e^2 |
 | RMSE | sqrt(MSE) |
-| Log model | ln(y) = b0 + b1 x; a unit rise in x multiplies y by e^b1 (percent change = (e^b1 - 1) x 100) |
 
 ## Probability distributions (syllabus; not used in this project's analysis)
 

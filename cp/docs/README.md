@@ -22,7 +22,7 @@
 | 01 | [01-project-overview.md](01-project-overview.md) | The big picture: topic, objective, dataset, variables, workflow |
 | 02 | [02-template-coverage.md](02-template-coverage.md) | Which notebook cells cover which report chapter/section (cell numbers) |
 | 03 | [03-dataset-sampling-cleaning.md](03-dataset-sampling-cleaning.md) | Variable types, how the data was sampled, cleaning decisions |
-| 04 | [04-descriptive-and-distribution.md](04-descriptive-and-distribution.md) | Descriptive statistics, skewness, kurtosis, log transform, city comparison, box plot |
+| 04 | [04-descriptive-and-distribution.md](04-descriptive-and-distribution.md) | Descriptive statistics, skewness, kurtosis, city comparison, box plot |
 | 05 | [05-lln-and-clt.md](05-lln-and-clt.md) | Law of Large Numbers and Central Limit Theorem demos |
 | 06 | [06-inference.md](06-inference.md) | Confidence interval, hypotheses, independent t-test, ANOVA |
 | 07 | [07-correlation.md](07-correlation.md) | Covariance, Pearson, Spearman |

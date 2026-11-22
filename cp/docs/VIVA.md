@@ -68,10 +68,7 @@ Maximum minus minimum: 35,00,000 - 1,200 = Rs. 34,98,800. It depends only on two
 IQR rule: below Q1 - 1.5 IQR (-24,500) or above Q3 + 1.5 IQR (67,500). 520 listings (about 11%) are above the upper bound.
 
 **Q20. What are skewness and kurtosis? What did you get?**
-Skewness measures asymmetry (positive = long right tail); excess kurtosis measures tail heaviness (0 for normal). Rent: skewness 21.41, excess kurtosis 841.11, extremely skewed and heavy-tailed. log(Rent): 0.91 and 0.88.
-
-**Q21. Why did you take the log of Rent?**
-It compresses very large values, reducing skewness from 21 to 0.9, and it repairs the regression assumptions (constant variance, roughly normal errors) that failed for raw Rent.
+Skewness measures asymmetry (positive = long right tail); excess kurtosis measures tail heaviness (0 for normal). Rent: skewness 21.41, excess kurtosis 841.11, extremely skewed and heavy-tailed.
 
 **Q22. Is Rent normally distributed?**
 No. Skewness of 21 and kurtosis of 841 make that obvious; the histogram has a long right tail.
@@ -267,7 +264,7 @@ The Rs. 35 lakh Bangalore listing fell into the training rows and inflates the t
 To check how the model does on listings it has not seen; good training scores alone can hide overfitting. 80% (3,797 rows) to fit, 20% (949 rows) to test, seed 42.
 
 **Q81. What are the assumptions of linear regression? Are they met?**
-Linearity, independent errors, constant variance, normal errors (and no perfect multicollinearity). For raw Rent the residual plot fans out and is skewed, so constant variance and normality fail; the log model's residuals are evenly spread.
+Linearity, independent errors, constant variance, normal errors (and no perfect multicollinearity). For raw Rent the residual plot fans out and is skewed, so constant variance and normality fail; we state this as a limitation of the regression.
 
 **Q82. Why did you build a multiple regression and what are its predictors?**
 Size alone explains little; rent also depends on rooms and city. Predictors: Size, BHK, Bathroom and City (as 0/1 dummies, Kolkata as the baseline).
@@ -275,26 +272,26 @@ Size alone explains little; rent also depends on rooms and city. Predictors: Siz
 **Q83. What are dummy variables? Why drop one city?** (tricky)
 A categorical variable is turned into 0/1 columns, one per category. One category is dropped as the baseline; keeping all would make the columns add up to the intercept column (perfect multicollinearity, the "dummy variable trap"). Each city coefficient is the difference from Kolkata.
 
-**Q84. How do you read the log model coefficients?**
-ln(Rent) = a + b x means a one-unit rise in x multiplies rent by e^b. Mumbai b = 1.537, e^1.537 = 4.65, so rent is about 365% higher than in Kolkata for a comparable flat; each extra BHK about +26%, bathroom +20%, each 100 sq. ft. about +5%.
+**Q84. How do you read the multiple model coefficients?**
+Each coefficient is the change in rent (Rs.) for a one-unit rise in that variable, other things equal: each extra sq. ft. about +Rs. 38, each extra BHK about +Rs. 3,450, each extra bathroom about +Rs. 12,035. A city coefficient is the difference from Kolkata, e.g. Mumbai is about Rs. 58,371 higher.
 
-**Q85. Which of your three models is the best and why?**
-The multiple model on log(Rent): on the test rows MAE about Rs. 12,230 against Rs. 22,345 (multiple on Rent) and Rs. 27,807 (simple); log-scale R-squared 0.77 train and 0.79 test (adjusted 0.773), so it explains about three quarters of the variation with no sign of overfitting.
+**Q85. Which of your two models is the best and why?**
+The multiple model on Rent: on the test rows MAE about Rs. 22,345 against Rs. 27,807 for the simple model, RMSE about Rs. 43,739 against Rs. 52,189, and test R-squared 0.52 against 0.32. It still leaves much of the variation unexplained.
 
-**Q86. The rupee R-squared for the log model on training rows is only 0.28. Is the model bad?** (tricky)
-No. That number is on the rupee scale, where the Rs. 35 lakh listing dominates the total variation in the training rows. On the log scale, where the model was fitted, R-squared is 0.77. Compare models on test MAE/RMSE, and always say which scale an R-squared is on.
+**Q86. The training R-squared of the multiple model is only 0.28. Is the model bad?** (tricky)
+It is modest, partly because the Rs. 35 lakh listing dominates the total variation in the training rows. The test R-squared is 0.52, and test MAE/RMSE are the safer way to compare models.
 
 **Q87. What is adjusted R-squared?**
-R-squared penalised for the number of predictors, so adding a useless variable does not raise it. For the log model it is 0.7734 (R-squared 0.7738), so every predictor earns its place.
+R-squared penalised for the number of predictors, so adding a useless variable does not raise it. For the multiple model it is 0.2791 (R-squared 0.2806), almost the same, so the predictors are not just adding noise.
 
 **Q88. What is multicollinearity and does it affect predictions?**
 Predictors that are strongly correlated with each other (Size, BHK, Bathroom, 0.72 to 0.79). Predictions are fine but individual coefficients are unstable. A VIF check would quantify it (not done).
 
 **Q89. Why does the raw multiple model say Chennai and Hyderabad are cheaper than Kolkata?**
-That is an artefact of fitting skewed rent with a straight-line model; after controlling for size and bathrooms the signs flip. In the log model all cities are above Kolkata, in the order of their averages.
+That is an artefact of fitting skewed rent with a straight-line model; after controlling for size and bathrooms the signs flip.
 
 **Q90. Can you predict rent with it? Any caution?**
-Yes, within the range of the data. Cautions: the back-transformed log prediction is a typical (median-like) rent, not a mean; do not extrapolate (for example above 8,000 sq. ft.); results come from one split; it shows association, not causation.
+Yes, within the range of the data. Cautions: do not extrapolate (for example above 8,000 sq. ft.); results come from one split; it shows association, not causation.
 
 **Q91. Why linear regression and not something fancier?**
 It is what the syllabus covers and every coefficient can be explained in words.
@@ -304,7 +301,7 @@ It is what the syllabus covers and every coefficient can be explained in words.
 ## G. Conclusion and judgement
 
 **Q92. What are your main findings?**
-Rent is right-skewed (mean 34,993 vs median 16,000); Mumbai is by far the dearest and Kolkata the cheapest; rent differs significantly by city and by furnishing; rent is moderately correlated with size, BHK and bathrooms; a multiple regression on log(Rent) explains about three quarters of the log-rent variation on unseen listings.
+Rent is right-skewed (mean 34,993 vs median 16,000); Mumbai is by far the dearest and Kolkata the cheapest; rent differs significantly by city and by furnishing; rent is moderately correlated with size, BHK and bathrooms; a multiple regression on Rent predicts better than Size alone on unseen listings (test R-squared 0.52 against 0.32).
 
 **Q93. What are the limitations of your study?**
 Convenience sample from six cities and three months of 2022; a few unusual listings kept; skewed data so the CI, t-test and ANOVA rely on large n; the t-test and ANOVA assume equal variances, which we did not verify (the group SDs differ a lot); no tests for individual pairs of cities; raw group comparisons without controls; one train/test split; association not causation.

@@ -1,6 +1,6 @@
 # 10. Notebook Walkthrough
 
-`property_location_rental_price_analysis.ipynb`: 93 cells (M = markdown, C = code). Cell numbers start at 0. Follow this order when presenting.
+`property_location_rental_price_analysis.ipynb`: 92 cells (M = markdown, C = code). Cell numbers start at 0. Follow this order when presenting.
 
 | Cells | Type | What happens | Why |
 |---|---|---|---|
@@ -15,7 +15,7 @@
 | 20-22 | M, C, M | Histogram of Rent and comment (right-skewed) | Distribution shape |
 | 23-32 | M, C | Mean, median, mode (24-26), comment (27), variance (28), SD (29), Q1/Q3/IQR (30), min/max/range (31), IQR outlier rule (32) | Required measures |
 | 33-34 | M, C | Summary table for Rent, Size, BHK, Bathroom | Compact descriptive table |
-| 35-38 | M, C | Skewness, kurtosis, log(Rent), side-by-side histogram, comment | Report 3.2 (new) |
+| 35-38 | M, C | Skewness, kurtosis, histogram, comment | Report 3.2 (new) |
 | 39-42 | M, C | City-wise count, mean, median, SD; bar chart; comment | Location analysis |
 | 43-45 | M, C | Box plot by city (log axis) and comment | Report 3.3 (new) |
 | 46-52 | M, C | Pairwise covariance and Pearson (47), correlation heatmap (49), scatter Size vs Rent (51), comments | Required covariance/correlation |
@@ -27,9 +27,9 @@
 | 75-77 | M, C, M | One-way ANOVA across six cities (`f_oneway`), interpretation and assumptions | (new) |
 | 78-79 | M, C | Regression intro and metric definitions; train/test split; `scores()` function | Report 6 (new) |
 | 80-85 | M, C | Simple regression: fit by formula (81), fitted line (82), residuals (83), effect of the Rs. 35 lakh row (84), interpretation (85) | Report 6.1 |
-| 86-90 | M, C | Multiple regression on Rent and log(Rent): coefficients (87), model comparison and adjusted R-squared (88), plots (89), interpretation (90) | Report 6.2-6.4 |
-| 91 | M | Key findings (8 points) | Report 7.2 |
-| 92 | M | Conclusion, limitations and future scope | Report 7.4, 8.1, 8.2 |
+| 86-89 | M, C | Multiple regression on Rent: coefficients (87), model comparison and adjusted R-squared (88), interpretation (89) | Report 6.2-6.4 |
+| 90 | M | Key findings (8 points) | Report 7.2 |
+| 91 | M | Conclusion, limitations and future scope | Report 7.4, 8.1, 8.2 |
 
 ## Key variables in the code (so you can explain any line)
 
@@ -47,7 +47,7 @@
 | `scores(actual, predicted)` | Returns MAE, MSE, RMSE, R-squared (cell 79) |
 | `slope`, `intercept` | Simple regression coefficients (cell 81) |
 | `X` | Design matrix: column of ones, Size, BHK, Bathroom, 5 city dummies (cell 87) |
-| `beta_raw`, `beta_log` | Coefficients of the multiple models (cell 87) |
+| `beta_raw` | Coefficients of the multiple model (cell 87) |
 
 ## Things you may be asked about in the code
 
@@ -57,7 +57,7 @@
 - **`stats.f_oneway(*groups)`** takes one array per city (the `*` unpacks the list).
 - **`np.linalg.lstsq(X, y)`** solves least squares: finds the coefficients that minimise the squared errors.
 - **`pd.get_dummies(..., columns=["City"])` then dropping `City_Kolkata`** makes 0/1 columns with Kolkata as the baseline.
-- **`np.exp(X @ beta_log)`** converts log-predictions back to rupees (`@` is matrix multiplication).
+- **`X[test_idx] @ beta_raw`** gives the predicted rents (`@` is matrix multiplication).
 
 ## Re-running
 

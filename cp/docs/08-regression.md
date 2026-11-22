@@ -1,6 +1,6 @@
 # 08. Regression Analysis
 
-Notebook cells 78-90. Report sections 6.1 to 6.4.
+Notebook cells 78-89. Report sections 6.1 to 6.4.
 
 ## What regression does
 
@@ -57,50 +57,42 @@ b1 = sum (x - x-bar)(y - y-bar) / sum (x - x-bar)^2,  b0 = y-bar - b1 x x-bar
 | Normal errors | residual plot | **Violated**: many large positive residuals |
 | No perfect multicollinearity (multiple models) | correlations among predictors | Size, BHK, Bathroom correlated 0.72 to 0.79, not perfect |
 
-The two violated assumptions are exactly what a log transform of Rent is meant to repair.
 
-## Model 2 and 3: Multiple linear regression (cells 86-90)
+## Model 2: Multiple linear regression (cells 86-89)
 
 **Predictors:** Size, BHK, Bathroom and City. City is categorical, so it becomes **dummy (0/1) columns**, one per city except the baseline. **Kolkata (the cheapest city) is the baseline**, so each city coefficient is the difference from Kolkata, other things equal. Dropping one category avoids the "dummy variable trap" (perfect multicollinearity). Coefficients are found with `np.linalg.lstsq`.
 
-Two versions: **(2) on Rent** in rupees and **(3) on log(Rent)**.
+Model **(2)** is fitted on Rent in rupees.
 
 ### Coefficients (cell 87, fitted on training rows)
 
-| Term | Rent model (Rs.) | log(Rent) model | log model: approx. % change in rent |
-|---|---|---|---|
-| Intercept | -42,272.38 | 8.0499 | |
-| Size (per sq. ft.) | 38.28 | 0.0005 | +0.05% per sq. ft. (about 5% per 100 sq. ft.) |
-| BHK (per extra) | 3,450.23 | 0.2307 | +25.9% |
-| Bathroom (per extra) | 12,034.65 | 0.1821 | +20.0% |
-| City: Bangalore | 1,765.15 | 0.3200 | +37.7% vs Kolkata |
-| City: Chennai | -7,305.62 | 0.2246 | +25.2% |
-| City: Delhi | 12,700.67 | 0.5826 | +79.1% |
-| City: Hyderabad | -16,522.69 | 0.0874 | +9.1% |
-| City: Mumbai | 58,370.91 | 1.5372 | +365.1% |
+| Term | Rent model (Rs.) |
+|---|---|
+| Intercept | -42,272.38 |
+| Size (per sq. ft.) | 38.28 |
+| BHK (per extra) | 3,450.23 |
+| Bathroom (per extra) | 12,034.65 |
+| City: Bangalore | 1,765.15 |
+| City: Chennai | -7,305.62 |
+| City: Delhi | 12,700.67 |
+| City: Hyderabad | -16,522.69 |
+| City: Mumbai | 58,370.91 |
 
-**How to read the log model:** if ln(Rent) = a + b x, then a one-unit increase in x multiplies rent by e^b, so the percentage change is (e^b - 1) x 100. Example: Mumbai b = 1.5372, e^1.5372 = 4.65, so rent is about 365% higher than in Kolkata for a comparable flat.
+**The raw model gives odd signs:** Chennai and Hyderabad come out *cheaper* than Kolkata although their average rents are higher. That is a sign the straight-line model is distorted by the skew in Rent and by the correlation among the predictors.
 
-**The raw model gives odd signs:** Chennai and Hyderabad come out *cheaper* than Kolkata although their average rents are higher. That is a sign the raw straight-line model is distorted by skew. In the log model all city effects are positive and follow the order of the city averages (Mumbai > Delhi > Bangalore > Chennai > Hyderabad > Kolkata).
-
-### Comparison of the three models (cell 88, rupee scale)
+### Comparison of the two models (cell 88, rupee scale)
 
 | Model | Train R-squared | Test R-squared | Test MAE (Rs.) | Test RMSE (Rs.) |
 |---|---|---|---|---|
 | Simple: Rent ~ Size | 0.1488 | 0.3172 | 27,807 | 52,189 |
 | Multiple: Rent | 0.2806 | 0.5204 | 22,345 | 43,739 |
-| Multiple: log(Rent), converted back to Rs. | 0.2812 | 0.7486 | 12,230 | 31,667 |
 
-Log model on the log scale: **train R-squared 0.7738, adjusted R-squared 0.7734, test R-squared 0.7913**. Raw multiple model adjusted R-squared (train) 0.2791.
+Multiple model adjusted R-squared (train): 0.2791.
 
 **Reading it:**
-- Judged on the test rows, the multiple model on log(Rent) is clearly best (MAE about 12,230 versus 22,345 and 27,807).
-- On the log scale about three quarters of the variation is explained (0.77 train, 0.79 test), and train is close to test, so there is no sign of overfitting.
-- The rupee-scale train R-squared values (0.15 to 0.28) look low because the Rs. 35 lakh listing dominates the total variation in the training rows; MAE and RMSE on the test rows are the safer comparison. Do not compare R-squared across scales without saying which scale.
+- Judged on the test rows, the multiple model is clearly better than the simple model (MAE about 22,345 versus 27,807; RMSE about 43,739 versus 52,189; test R-squared 0.52 versus 0.32).
+- The train R-squared values (0.15 and 0.28) look low because the Rs. 35 lakh listing dominates the total variation in the training rows; MAE and RMSE on the test rows are the safer comparison.
 
-### Plots (cell 89)
-- **Actual vs predicted (left):** points near the red diagonal are well predicted; the model under-predicts the very expensive listings.
-- **Residuals on log scale (right):** spread evenly around zero with no fan shape, so constant variance is reasonable for the log model.
 
 ## Multicollinearity
 
@@ -108,12 +100,11 @@ Size, BHK and Bathroom are strongly correlated (0.72 to 0.79). Predictions are s
 
 ## Caveats to state
 
-- **Back-transformation:** exp(predicted log rent) estimates a typical (median-like) rent, not the mean; it slightly under-predicts the average. We did not apply a correction.
 - **Association, not causation:** the models describe patterns in these listings.
 - **One split:** results come from a single train/test split; cross-validation would be steadier.
 - **Extrapolation:** do not predict outside the data range (for example sizes above 8,000 sq. ft.).
 - **Why not machine learning?** This is a statistics course; linear regression is what the syllabus specifies and it is easier to interpret.
 
-## Prediction example (for a demo, from the log model)
+## Prediction example (for a demo)
 
-For a predicted rent use ln(Rent) = 8.0499 + 0.0005 x Size + 0.2307 x BHK + 0.1821 x Bathroom + city effect, then Rent = e^(that). A sense check: a 2 BHK, 1 bathroom, 800 sq. ft. flat in Kolkata gives ln(Rent) = 8.0499 + 0.000497 x 800 + 0.2307 x 2 + 0.1821 = 9.0913 (the Size coefficient 0.0005 in the table is rounded; its exact value is 0.000497), so Rent = e^9.0913, which is about Rs. 8,877, close to Kolkata's median of Rs. 8,500. (This example was computed outside the notebook with the same coefficients; it is not a notebook cell.)
+Rent = -42,272.38 + 38.28 x Size + 3,450.23 x BHK + 12,034.65 x Bathroom + city effect. A sense check: a 2 BHK, 1 bathroom, 800 sq. ft. flat in Kolkata (the baseline, so no city effect) gives -42,272.38 + 38.2756 x 800 + 3,450.23 x 2 + 12,034.65, which is about Rs. 7,283, close to Kolkata's median of Rs. 8,500. (This example was computed outside the notebook with the same coefficients; it is not a notebook cell.)

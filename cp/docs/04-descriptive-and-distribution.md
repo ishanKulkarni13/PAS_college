@@ -32,15 +32,14 @@ Notebook cells 17-45. Report sections 3.1 to 3.4.
 
 ## Distribution analysis (report 3.2)
 
-| Measure | Rent | log(Rent) | Normal distribution |
-|---|---|---|---|
-| Skewness | 21.41 | 0.91 | 0 |
-| Excess kurtosis | 841.11 | 0.88 | 0 |
+| Measure | Rent | Normal distribution |
+|---|---|---|
+| Skewness | 21.41 | 0 |
+| Excess kurtosis | 841.11 | 0 |
 
 - **Skewness** measures asymmetry. Positive means a long right tail. 21 is extreme.
 - **Excess kurtosis** measures how heavy the tails are (pandas `.kurt()` is "excess": normal = 0). 841 means a very heavy tail caused by a few giant values.
-- **Log transform:** taking natural log compresses large values. log(Rent) has skewness 0.91, so it is much closer to a bell shape. This is why the regression also uses log(Rent) (see 08).
-- **Histogram (cell 21):** heavily right-skewed; the x-axis is cut at Rs. 3,00,000 for readability (it is stated in the chart title on the side-by-side version, cell 37).
+- **Histogram (cell 21):** heavily right-skewed; the x-axis is cut at Rs. 3,00,000 for readability (it is stated in the chart title, cell 37).
 
 **Is Rent normal?** No. We did not need to run a normality test: skewness 21 and kurtosis 841 make it obvious. For the CI and tests we rely on the large sample (CLT, see 05).
 
@@ -74,4 +73,4 @@ Box = Q1 to Q3 (the middle 50%), line inside = median, whiskers reach up to 1.5 
 1. Rent is right-skewed, so mean > median.
 2. Location matters a lot: Mumbai is far above everyone else, Kolkata far below.
 3. Within-city variation is also huge (large SD), so city explains part of rent but not all.
-4. Skew and outliers are the reason we also use the median, Spearman correlation and log(Rent); the t-test and ANOVA assume equal variances and roughly normal data, which skewed rent does not satisfy well (see 06).
+4. Skew and outliers are the reason we also use the median and Spearman correlation; the t-test and ANOVA assume equal variances and roughly normal data, which skewed rent does not satisfy well (see 06).
