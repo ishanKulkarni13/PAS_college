@@ -23,7 +23,7 @@
 | 56-62 | M, C | LLN: reference mean (57), nested random samples (59), line plot (61), comments | Seminar topic |
 | 63-66 | M, C | CLT: 1,000 sample means for n = 30 and n = 100 (64), histograms (65), comment | Supports inference (new) |
 | 67-71 | M, C | Inference intro (alpha 0.05); 95% CI overall (69) and by city (70); comment | Report 4.1 (new) |
-| 72-74 | M, C, M | Independent two-sample t-test (Student's, `equal_var=True`), Furnished vs Unfurnished: group summary, pooled SD, t by hand and by scipy, p-value, assumptions | Report 4.2-4.4 (new) |
+| 72-74 | M, C, M | Independent two-sample t-test (Student's, pooled variance), Furnished vs Unfurnished: group summary, pooled variance, SD and standard error, t by hand, p-value from the t distribution (`stats.t.sf`), assumptions | Report 4.2-4.4 (new) |
 | 75-77 | M, C, M | One-way ANOVA across six cities (`f_oneway`), interpretation and assumptions | (new) |
 | 78-79 | M, C | Regression intro and metric definitions; train/test split; `scores()` function | Report 6 (new) |
 | 80-85 | M, C | Simple regression: fit by formula (81), fitted line (82), residuals (83), effect of the Rs. 35 lakh row (84), interpretation (85) | Report 6.1 |
@@ -53,7 +53,7 @@
 
 - **`rent.var()` / `rent.std()`** use n-1 by default (sample formula).
 - **`rent.sample(frac=1, random_state=42)`** shuffles all rows; the `expanding().mean()` gives the mean of the first n values for every n.
-- **`equal_var=True`** in `stats.ttest_ind` makes it the traditional (pooled-variance) Student's t-test: it assumes equal population variances. The notebook also computes the pooled SD and the t statistic by hand and checks they match scipy.
+- **`2 * stats.t.sf(abs(t_statistic), df_t)`** gives the two-tailed p-value from the Student's t distribution (`sf` is the upper-tail probability, 1 - cdf, but accurate for very small values). The pooled variance, pooled SD, standard error, t statistic and degrees of freedom are calculated by hand; the pooled-variance form assumes equal population variances.
 - **`stats.f_oneway(*groups)`** takes one array per city (the `*` unpacks the list).
 - **`np.linalg.lstsq(X, y)`** solves least squares: finds the coefficients that minimise the squared errors.
 - **`pd.get_dummies(..., columns=["City"])` then dropping `City_Kolkata`** makes 0/1 columns with Kolkata as the baseline.

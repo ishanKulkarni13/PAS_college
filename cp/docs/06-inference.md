@@ -21,7 +21,7 @@ CI = x-bar +/- t* x s / sqrt(n)
 | Margin of error | about 2,222.7 |
 | **95% CI** | **Rs. 32,770.75 to Rs. 37,216.16** |
 
-The notebook computes this by hand and checks it with `scipy.stats.t.interval`; both agree exactly (cell 69).
+The notebook computes this by hand from the formula above (cell 69).
 
 **Why t and not Z?** The population standard deviation is unknown, so we use s and the t distribution. With 4,745 degrees of freedom t* is practically 1.96, so the result is almost the same as a Z interval.
 
@@ -68,7 +68,7 @@ s_p^2 = [(n1 - 1) s1^2 + (n2 - 1) s2^2] / (n1 + n2 - 2)
 
 t = (x1-bar - x2-bar) / ( s_p x sqrt(1/n1 + 1/n2) ), with n1 + n2 - 2 degrees of freedom, from the Student t distribution.
 
-In the notebook the pooled SD and t are calculated by hand and checked against `stats.ttest_ind(furnished, unfurnished, equal_var=True)`. `equal_var=True` is the traditional test; `equal_var=False` would be Welch's version, which we do not use.
+In the notebook the pooled variance, pooled SD, standard error, t statistic and degrees of freedom are all calculated by hand. SciPy's Student's t distribution is used only for the two-tailed p-value, `p = 2 * stats.t.sf(abs(t), df)`, using our own t and df, and p is compared with alpha = 0.05. We use the traditional equal-variance (pooled) test; Welch's version, which does not assume equal variances, is not used.
 
 | | Furnished | Unfurnished |
 |---|---|---|
@@ -82,8 +82,8 @@ In the notebook the pooled SD and t are calculated by hand and checked against `
 | Difference of means | Rs. 33,648.67 |
 | Pooled standard deviation | Rs. 51,678.23 |
 | Degrees of freedom (680 + 1,815 - 2) | 2,493 |
-| t statistic (by hand and scipy agree) | 14.482 |
-| p-value | 1.07e-45 |
+| t statistic (by hand) | 14.482 |
+| p-value (two-tailed, from the t distribution with 2,493 df) | 1.07e-45 |
 
 **Decision:** p << 0.05, reject H0. Furnished properties have a clearly higher mean rent (about Rs. 33,649 more). The medians (27,000 vs 12,000) show the same direction, so it is not only caused by extreme rents.
 
